@@ -1,0 +1,47 @@
+# Lingkungan uji/produksi di satu server daratan (PRD bagian 13).
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: sandar
+      POSTGRES_USER: sandar
+      POSTGRES_PASSWORD: ${SANDAR_DB_PASSWORD:-ganti-sandi-ini}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U sandar"]
+      interval: 5s
+      retries: 10
+    restart: unless-stopped
+
+  app:
+    build: .
+    environment:
+      SANDAR_DATABASE_URL: postgresql+psycopg://sandar:${SANDAR_DB_PASSWORD:-ganti-sandi-ini}@db:5432/sandar
+      SANDAR_CORS: ${SANDAR_CORS:-}
+    ports:
+      - "${SANDAR_PORT:-8000}:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+
+  # Cadangan harian basis data (PRD 11: ketersediaan data).
+  cadangan:
+    image: postgres:16-alpine
+    environment:
+      PGPASSWORD: ${SANDAR_DB_PASSWORD:-ganti-sandi-ini}
+    volumes:
+      - ./cadangan:/cadangan
+    entrypoint: >
+      sh -c 'while true; do
+        pg_dump -h db -U sandar sandar | gzip > /cadangan/sandar_$$(date +%F).sql.gz;
+        find /cadangan -name "*.sql.gz" -mtime +30 -delete;
+        sleep 86400; done'
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  pgdata:

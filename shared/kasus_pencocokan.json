@@ -1,0 +1,98 @@
+{
+  "_catatan": "Kasus uji bersama untuk modul pencocokan di perangkat (TypeScript) dan di server (Python). Kedua modul wajib menghasilkan angka yang sama. Semua nama dan angka adalah data contoh.",
+  "bagi": [
+    {
+      "nama": "Contoh PRD 7.2: kapal nelayan 300 tandan, tiga petani Desa Meok",
+      "ruang": 300,
+      "permintaan": [
+        { "id": "rahmat", "q": 120, "dibuat": "2026-10-15T08:00:00" },
+        { "id": "siti", "q": 150, "dibuat": "2026-10-15T08:05:00" },
+        { "id": "yanto", "q": 210, "dibuat": "2026-10-15T08:10:00" }
+      ],
+      "jatah": { "rahmat": 75, "siti": 94, "yanto": 131 }
+    },
+    {
+      "nama": "Permintaan muat seluruhnya bila Q <= R",
+      "ruang": 800,
+      "permintaan": [
+        { "id": "a", "q": 45, "dibuat": "2026-10-15T08:00:00" },
+        { "id": "b", "q": 56, "dibuat": "2026-10-15T08:05:00" }
+      ],
+      "jatah": { "a": 45, "b": 56 }
+    },
+    {
+      "nama": "Sisa ruang 0: semua masuk daftar tunggu",
+      "ruang": 0,
+      "permintaan": [
+        { "id": "a", "q": 10, "dibuat": "2026-10-15T08:00:00" },
+        { "id": "b", "q": 20, "dibuat": "2026-10-15T08:05:00" }
+      ],
+      "jatah": { "a": 0, "b": 0 }
+    },
+    {
+      "nama": "Pecahan sama: catatan yang dibuat lebih awal didahulukan",
+      "ruang": 5,
+      "permintaan": [
+        { "id": "c", "q": 3, "dibuat": "2026-10-15T09:00:00" },
+        { "id": "a", "q": 3, "dibuat": "2026-10-15T07:00:00" },
+        { "id": "b", "q": 3, "dibuat": "2026-10-15T08:00:00" }
+      ],
+      "jatah": { "a": 2, "b": 2, "c": 1 }
+    },
+    {
+      "nama": "Satu tandan, dua permintaan sama besar",
+      "ruang": 1,
+      "permintaan": [
+        { "id": "baru", "q": 1, "dibuat": "2026-10-15T09:00:00" },
+        { "id": "lama", "q": 1, "dibuat": "2026-10-15T08:00:00" }
+      ],
+      "jatah": { "baru": 0, "lama": 1 }
+    },
+    {
+      "nama": "Tidak ada permintaan",
+      "ruang": 100,
+      "permintaan": [],
+      "jatah": {}
+    },
+    {
+      "nama": "Penyesuaian manual: Yanto ditetapkan 100, sisanya dibagi proporsional",
+      "ruang": 300,
+      "permintaan": [
+        { "id": "rahmat", "q": 120, "dibuat": "2026-10-15T08:00:00" },
+        { "id": "siti", "q": 150, "dibuat": "2026-10-15T08:05:00" },
+        { "id": "yanto", "q": 210, "dibuat": "2026-10-15T08:10:00" }
+      ],
+      "tetap": { "yanto": 100 },
+      "jatah": { "rahmat": 89, "siti": 111, "yanto": 100 }
+    },
+    {
+      "nama": "Jatah tidak pernah melebihi permintaan dan jumlahnya sama dengan R",
+      "ruang": 10,
+      "permintaan": [
+        { "id": "a", "q": 1, "dibuat": "2026-10-15T08:00:00" },
+        { "id": "b", "q": 7, "dibuat": "2026-10-15T08:01:00" },
+        { "id": "c", "q": 13, "dibuat": "2026-10-15T08:02:00" }
+      ],
+      "jatah": { "a": 1, "b": 3, "c": 6 }
+    }
+  ],
+  "rencana": [
+    {
+      "nama": "Dua keberangkatan: sisa kapal nelayan masuk feri berikutnya",
+      "keberangkatan": [
+        { "id": "feri", "ruang": 800, "tanggal": "2026-10-24", "berangkat": "2026-10-24T18:00" },
+        { "id": "bahari2", "ruang": 300, "tanggal": "2026-10-19", "berangkat": "2026-10-19T06:00" }
+      ],
+      "catatan": [
+        { "id": "rahmat", "q": 120, "siap": "2026-10-18", "dibuat": "2026-10-15T08:00:00" },
+        { "id": "siti", "q": 150, "siap": "2026-10-18", "dibuat": "2026-10-15T08:05:00" },
+        { "id": "yanto", "q": 210, "siap": "2026-10-19", "dibuat": "2026-10-15T08:10:00" },
+        { "id": "dewi", "q": 40, "siap": "2026-10-22", "dibuat": "2026-10-15T08:20:00" }
+      ],
+      "jatah": {
+        "bahari2": { "rahmat": 75, "siti": 94, "yanto": 131 },
+        "feri": { "rahmat": 45, "siti": 56, "yanto": 79, "dewi": 40 }
+      }
+    }
+  ]
+}

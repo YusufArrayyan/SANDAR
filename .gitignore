@@ -1,0 +1,14 @@
+node_modules/
+frontend/dist/
+backend/.venv/
+backend/sandar.db*
+__pycache__/
+*.pyc
+.pytest_cache/
+cadangan/
+.env
+*.tsbuildinfo
+.claude/
+*.docx
+test-results/
+playwright-report/

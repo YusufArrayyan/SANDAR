@@ -1,0 +1,14 @@
+import os
+from pathlib import Path
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+DATABASE_URL = os.getenv("SANDAR_DATABASE_URL", f"sqlite:///{BASE_DIR / 'sandar.db'}")
+# Folder hasil build PWA. Bila ada, server juga melayani antarmuka.
+WEB_DIST = Path(os.getenv("SANDAR_WEB_DIST", BASE_DIR.parent / "frontend" / "dist"))
+CORS_ORIGINS = [o for o in os.getenv("SANDAR_CORS", "http://localhost:5173").split(",") if o]
+
+# Iterasi PBKDF2 untuk hash PIN. Harus sama dengan frontend/src/lib/pin.ts.
+PIN_ITERASI = 60000
+
+MAKS_OP_PER_KIRIMAN = 50
