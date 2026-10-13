@@ -38,7 +38,7 @@ KODE_DEMO = {
 }
 
 
-def isi(demo: bool) -> None:
+def isi(demo: bool, admin_hp: str = "0811000000", admin_pin: str = PIN_DEMO) -> None:
     Base.metadata.create_all(engine)
     with SessionLocal() as db:
         siapkan_penghitung(db)
@@ -46,7 +46,7 @@ def isi(demo: bool) -> None:
             print("Basis data sudah berisi akun Admin. Pakai --reset untuk mengisi ulang.")
             return
 
-        admin = Pengguna(id=_id(), nama="Admin SANDAR", hp="0811000000", peran="admin", pin_hash=hash_pin(PIN_DEMO))
+        admin = Pengguna(id=_id(), nama="Admin SANDAR", hp=admin_hp, peran="admin", pin_hash=hash_pin(admin_pin))
         db.add(admin)
         db.flush()
         tandai(db, admin)
@@ -55,7 +55,7 @@ def isi(demo: bool) -> None:
             kode = KodeAktivasi(kode=buat_kode_aktivasi(), pengguna_id=admin.id, keterangan="Perangkat Admin pertama")
             db.add(kode)
             db.commit()
-            print(f"Akun Admin: HP {admin.hp}, PIN {PIN_DEMO}. Kode aktivasi perangkat Admin: {kode.kode}")
+            print(f"Akun Admin: HP {admin.hp}. Kode aktivasi perangkat Admin: {kode.kode}")
             print("Segera ganti PIN Admin setelah masuk.")
             return
 
@@ -152,6 +152,28 @@ def isi(demo: bool) -> None:
         print("Kode aktivasi (sekali pakai):")
         for kode, ket in KODE_DEMO.items():
             print(f"  {kode}  {ket}")
+
+
+def isi_awal_dari_lingkungan() -> None:
+    """Untuk hosting tanpa terminal (misalnya Render gratis). Dijalankan saat server menyala,
+    hanya bila basis data belum punya akun Admin.
+
+    - SANDAR_ADMIN_HP dan SANDAR_ADMIN_PIN: membuat akun Admin pertama; kode aktivasi tampil di log.
+    - SANDAR_DATA_CONTOH=1: mengisi data contoh PRD (PIN 1234, kode tetap). Hanya untuk uji coba.
+    """
+    Base.metadata.create_all(engine)
+    with SessionLocal() as db:
+        if db.scalar(select(Pengguna).where(Pengguna.peran == "admin")):
+            return
+    if os.getenv("SANDAR_DATA_CONTOH") == "1":
+        isi(demo=True)
+        return
+    hp, pin = os.getenv("SANDAR_ADMIN_HP", "").strip(), os.getenv("SANDAR_ADMIN_PIN", "").strip()
+    if hp and pin:
+        if not (pin.isdigit() and len(pin) == 4):
+            print("SANDAR_ADMIN_PIN harus 4 angka. Akun Admin tidak dibuat.")
+            return
+        isi(demo=False, admin_hp=hp, admin_pin=pin)
 
 
 def main() -> None:

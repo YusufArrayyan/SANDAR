@@ -17,6 +17,7 @@ from .config import CORS_ORIGINS, WEB_DIST
 from .db import Base, SessionLocal, engine
 from .layanan import siapkan_penghitung
 from .rencana import hitung_ulang
+from .seed import isi_awal_dari_lingkungan
 
 log = logging.getLogger("sandar")
 
@@ -38,6 +39,7 @@ async def lifespan(_: FastAPI) -> AsyncIterator[None]:
     Base.metadata.create_all(engine)
     with SessionLocal() as db:
         siapkan_penghitung(db)
+    isi_awal_dari_lingkungan()
     tugas = asyncio.create_task(_penjaga_batas_waktu())
     yield
     tugas.cancel()

@@ -15,6 +15,8 @@ Seluruh nama, angka, dan harga pada data contoh bukan data lapangan.
 | `shared/kasus_pencocokan.json` | Kasus uji pencocokan yang dipakai bersama oleh perangkat dan server |
 | `docs/UJI_RILIS.md` | Protokol uji rilis: uji otomatis, uji perangkat Android, uji kegunaan dan SUS |
 | `docs/PERUBAHAN_PRD.md` | Perubahan terhadap PRD yang sudah disetujui |
+| `docs/DEPLOY_GRATIS.md` | Deploy gratis di Render dan Neon |
+| `render.yaml` | Blueprint Render |
 | `Dockerfile`, `docker-compose.yml` | Satu kontainer aplikasi, PostgreSQL, dan cadangan harian |
 
 ## Menjalankan untuk pengembangan
@@ -76,6 +78,10 @@ cd frontend && npm test && npm run build && npm run test:e2e
 Semua tes lulus di SQLite dan PostgreSQL 18. Untuk menjalankannya terhadap PostgreSQL, isi `SANDAR_UJI_DATABASE_URL` (pytest) dan `SANDAR_E2E_DATABASE_URL` (end-to-end) dengan basis data kosong khusus uji.
 
 ## Produksi
+
+**Gratis:** Render + Neon, tanpa kartu kredit. Langkahnya ada di [docs/DEPLOY_GRATIS.md](docs/DEPLOY_GRATIS.md).
+
+**Server sendiri dengan Docker:**
 
 ```bash
 SANDAR_DB_PASSWORD=sandi-kuat docker compose up -d --build

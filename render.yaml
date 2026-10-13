@@ -1,0 +1,20 @@
+# Blueprint Render: satu layanan web gratis dari Dockerfile.
+# Basis data memakai PostgreSQL gratis dari Neon (tidak kedaluwarsa); isi SANDAR_DATABASE_URL
+# dengan connection string Neon saat membuat blueprint.
+services:
+  - type: web
+    name: sandar
+    runtime: docker
+    plan: free
+    region: singapore
+    branch: main
+    autoDeploy: true
+    healthCheckPath: /api/sehat
+    envVars:
+      - key: SANDAR_DATABASE_URL
+        sync: false
+      # Akun Admin pertama dibuat saat server pertama menyala; kode aktivasi tampil di log.
+      - key: SANDAR_ADMIN_HP
+        sync: false
+      - key: SANDAR_ADMIN_PIN
+        sync: false
