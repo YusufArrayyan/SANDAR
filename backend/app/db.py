@@ -8,8 +8,10 @@ from .config import DATABASE_URL
 _sqlite = DATABASE_URL.startswith("sqlite")
 engine = create_engine(
     DATABASE_URL,
-    connect_args={"check_same_thread": False} if _sqlite else {},
+    # Tanpa prepared statement agar aman di pooler PgBouncer (misalnya alamat "-pooler" Neon).
+    connect_args={"check_same_thread": False} if _sqlite else {"prepare_threshold": None},
     pool_pre_ping=True,
+    pool_recycle=300,
 )
 
 if _sqlite:
