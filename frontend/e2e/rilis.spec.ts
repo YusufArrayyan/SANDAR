@@ -99,6 +99,12 @@ test('FR-40 dan FR-41: harga dari Mitra pasar diterima perangkat', async ({ page
   await page.getByRole('link', { name: 'Harga', exact: true }).click();
   await expect(page.locator('.angka-besar')).toContainText('Rp63.500');
   await expect(page.getByText('Ini bukan jaminan harga beli.')).toBeVisible();
+
+  // Berganti peran: lepas aktivasi lalu kembali ke layar kode aktivasi.
+  await page.getByRole('link', { name: 'Akun' }).click();
+  await page.getByRole('button', { name: 'Pakai kode aktivasi lain' }).click();
+  await page.getByRole('button', { name: 'Ya, ganti kode' }).click();
+  await expect(page.getByLabel('Kode aktivasi perangkat')).toBeVisible();
 });
 
 test('FR-62: Admin membuka ringkasan indikator dan membuat kode aktivasi', async ({ page }) => {

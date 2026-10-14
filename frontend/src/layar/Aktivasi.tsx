@@ -1,5 +1,5 @@
-import { Ship } from 'lucide-react';
-import { useState, type FormEvent } from 'react';
+import { ListChecks, Ship, Tag, WifiOff } from 'lucide-react';
+import { useState, type FormEvent, type ReactNode } from 'react';
 import { KotakPesan } from '../komponen/Umum';
 import { GalatJaringan } from '../lib/api';
 import { tulisMeta } from '../lib/db';
@@ -11,6 +11,31 @@ export function Merek() {
     <div className="merek">
       <Ship size={44} strokeWidth={2} aria-hidden />
       <strong>SANDAR</strong>
+    </div>
+  );
+}
+
+/** Layar Masuk dan Aktivasi. Di layar lebar, panel merek tampil di sebelah kiri. */
+export function BingkaiMasuk({ children }: { children: ReactNode }) {
+  return (
+    <div className="layar-masuk">
+      <section className="panel-merek" aria-label="Tentang SANDAR">
+        <Merek />
+        <h2>Koordinasi muatan kapal dan harga untuk petani pulau terluar.</h2>
+        <ul>
+          <li>
+            <WifiOff size={22} aria-hidden /> Catat panen dan ruang muat tanpa sinyal. Data terkirim sendiri saat sinyal ada.
+          </li>
+          <li>
+            <ListChecks size={22} aria-hidden /> Ruang kapal yang terbatas dibagi adil dan dapat dihitung ulang dengan tangan.
+          </li>
+          <li>
+            <Tag size={22} aria-hidden /> Harga acuan Kota Bengkulu dan sisa hasil per tandan setelah biaya angkut.
+          </li>
+        </ul>
+        <p className="catatan-panel">Untuk petani pisang Pulau Enggano, Bengkulu Utara.</p>
+      </section>
+      {children}
     </div>
   );
 }
@@ -45,6 +70,7 @@ export function Aktivasi() {
   }
 
   return (
+    <BingkaiMasuk>
     <div className="layar tanpa-nav">
       <form className="masuk-isi" onSubmit={kirim} noValidate>
         <Merek />
@@ -74,6 +100,7 @@ export function Aktivasi() {
         </p>
       </form>
     </div>
+    </BingkaiMasuk>
   );
 }
 
@@ -86,6 +113,7 @@ export function Diblokir({ pesan }: { pesan: string }) {
     ubahKeadaan({ perangkat: null, pengguna: null, diblokir: null });
   }
   return (
+    <BingkaiMasuk>
     <div className="layar tanpa-nav">
       <div className="masuk-isi">
         <Merek />
@@ -101,5 +129,6 @@ export function Diblokir({ pesan }: { pesan: string }) {
         </button>
       </div>
     </div>
+    </BingkaiMasuk>
   );
 }

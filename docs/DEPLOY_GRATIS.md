@@ -52,6 +52,14 @@ Untuk demo atau uji coba sebelum data sungguhan dimasukkan, tambahkan variabel `
 
 Kode dan PIN contoh mudah ditebak. Jangan pakai data contoh untuk data petani sungguhan. Untuk berpindah ke data sungguhan, buat proyek Neon baru, ganti `SANDAR_DATABASE_URL`, hapus `SANDAR_DATA_CONTOH`, lalu isi `SANDAR_ADMIN_HP` dan `SANDAR_ADMIN_PIN`.
 
+## Kode aktivasi untuk juri
+
+Tambahkan variabel `SANDAR_JURI` berisi jumlah juri (misalnya `5`) di Render, tab **Environment**. Setiap server menyala:
+- Data contoh PRD dipastikan ada dan tetap segar: ada kapal yang akan berangkat, harga terbaru, dan panen yang menunggu kapal.
+- Paket kode juri dicetak ke log. Cari `KODE AKTIVASI JURI` di **Logs**.
+
+Satu paket berisi kode untuk perangkat simpul Desa Meok, Pengelola kapal, Mitra pasar, dan Admin. Status setiap kode (siap atau sudah dipakai) ikut tercetak. Akun Admin sungguhan tidak diubah. Panduan untuk juri ada di `docs/PANDUAN_JURI.md`.
+
 ## Pembaruan aplikasi
 
 Setiap push ke cabang `main` di GitHub otomatis dibuild ulang dan dipasang oleh Render. Ponsel menerima versi baru saat aplikasi dibuka berikutnya dan memasangnya ketika aplikasi ditinggalkan.

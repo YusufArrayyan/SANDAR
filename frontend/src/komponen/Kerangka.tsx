@@ -104,6 +104,41 @@ export function NavBawah() {
   );
 }
 
+const NAMA_PERAN_SINGKAT: Record<Peran, string> = {
+  petani: 'Petani',
+  simpul: 'Pengelola simpul',
+  kapal: 'Pengelola kapal',
+  mitra: 'Mitra pasar',
+  admin: 'Admin',
+};
+
+/** Menu samping untuk layar lebar (laptop, tablet mendatar); di ponsel tersembunyi. */
+function NavSamping() {
+  const u = useKeadaan((k) => k.pengguna);
+  if (!u) return null;
+  return (
+    <aside className="nav-samping" aria-label="Navigasi utama">
+      <div className="merek-samping">
+        <Ship size={30} strokeWidth={2} aria-hidden />
+        <strong>SANDAR</strong>
+      </div>
+      <div className="profil-samping">
+        <span className="tebal">{u.nama}</span>
+        <span className="redup kecil">{NAMA_PERAN_SINGKAT[u.peran]}</span>
+      </div>
+      <nav>
+        {MENU[u.peran].map(({ ke, label, ikon: Ikon }) => (
+          <NavLink key={ke} to={ke} end className={({ isActive }) => (isActive ? 'aktif' : '')}>
+            <Ikon size={22} strokeWidth={2} aria-hidden />
+            {label}
+          </NavLink>
+        ))}
+      </nav>
+      <p className="redup kecil kaki-samping">Catat panen dan ruang muat, tanpa sinyal.</p>
+    </aside>
+  );
+}
+
 interface Props {
   judul: string;
   kembali?: boolean | string;
@@ -120,6 +155,8 @@ interface Props {
 export function Layar({ judul, kembali, children, tombol, nav = true, lebar }: Props) {
   const pindah = useNavigate();
   return (
+    <div className="bingkai">
+      <NavSamping />
     <div className={`layar${lebar ? ' lebar' : ''}${nav ? '' : ' tanpa-nav'}`}>
       <header className="bilah-atas">
         {kembali && (
@@ -137,6 +174,7 @@ export function Layar({ judul, kembali, children, tombol, nav = true, lebar }: P
       <main className={`isi${tombol ? ' ada-tombol' : ''}`}>{children}</main>
       {tombol && <div className="kaki-tombol">{tombol}</div>}
       {nav && <NavBawah />}
+    </div>
     </div>
   );
 }

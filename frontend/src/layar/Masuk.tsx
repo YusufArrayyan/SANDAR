@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { KotakPesan } from '../komponen/Umum';
 import { layarAwal, masuk } from '../lib/sesi';
 import { ambilKeadaan } from '../lib/toko';
-import { Merek } from './Aktivasi';
+import { BingkaiMasuk, Merek } from './Aktivasi';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { db } from '../lib/db';
 
@@ -48,6 +48,7 @@ export function Masuk() {
   }, [pin]);
 
   return (
+    <BingkaiMasuk>
     <div className="layar tanpa-nav">
       <form className="masuk-isi" onSubmit={kirim} noValidate>
         <Merek />
@@ -100,5 +101,6 @@ export function Masuk() {
         </p>
       </form>
     </div>
+    </BingkaiMasuk>
   );
 }

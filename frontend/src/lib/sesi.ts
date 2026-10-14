@@ -75,6 +75,21 @@ export async function masuk(hp: string, pin: string): Promise<HasilMasuk> {
   return { ok: true };
 }
 
+/**
+ * Melepas aktivasi perangkat ini agar dapat diaktifkan dengan kode lain (misalnya berganti
+ * peran saat demo, atau ponsel berpindah tangan). Hanya boleh bila tidak ada catatan yang
+ * belum terkirim, supaya tidak ada data yang hilang.
+ */
+export async function lepasPerangkat(): Promise<void> {
+  if ((await db.outbox.count()) > 0) {
+    throw new Error('Masih ada catatan yang belum terkirim. Kirim dulu dari layar Sinkronisasi.');
+  }
+  await db.transaction('rw', db.tables, async () => {
+    for (const t of db.tables) await t.clear();
+  });
+  ubahKeadaan({ perangkat: null, pengguna: null, diblokir: null });
+}
+
 export async function keluar(): Promise<void> {
   await tulisMeta('sesi', null);
   ubahKeadaan({ pengguna: null });

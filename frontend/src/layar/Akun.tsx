@@ -1,5 +1,5 @@
 import { useLiveQuery } from 'dexie-react-hooks';
-import { KeyRound, LogOut, RefreshCw } from 'lucide-react';
+import { KeyRound, LogOut, RefreshCw, Smartphone } from 'lucide-react';
 import { useState, type FormEvent } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Layar } from '../komponen/Kerangka';
@@ -8,7 +8,7 @@ import { gantiPin } from '../lib/aksi';
 import { db } from '../lib/db';
 import { NAMA_PERAN } from '../lib/format';
 import { cekPin } from '../lib/pin';
-import { keluar } from '../lib/sesi';
+import { keluar, lepasPerangkat } from '../lib/sesi';
 import { tampilkanPesan, useKeadaan } from '../lib/toko';
 
 export function Akun() {
@@ -50,10 +50,50 @@ export function Akun() {
         <LogOut size={20} aria-hidden /> Keluar
       </button>
       {menunggu > 0 && <p className="catatan-kaki">Catatan yang belum terkirim tetap tersimpan di perangkat setelah Anda keluar.</p>}
+      <GantiKode menunggu={menunggu} />
       <p className="catatan-kaki" style={{ marginTop: 'auto' }}>
         SANDAR versi 1.0.0-rc.1. Untuk memasang di layar utama, buka menu peramban lalu pilih Tambahkan ke layar utama.
       </p>
     </Layar>
+  );
+}
+
+/** Mengaktifkan perangkat ini dengan kode lain, misalnya untuk mencoba peran lain. */
+function GantiKode({ menunggu }: { menunggu: number }) {
+  const [tanya, setTanya] = useState(false);
+  const [galat, setGalat] = useState<string | null>(null);
+
+  async function lepas() {
+    try {
+      await lepasPerangkat();
+    } catch (e) {
+      setGalat((e as Error).message);
+    }
+  }
+
+  if (!tanya)
+    return (
+      <button className="tombol kedua" onClick={() => setTanya(true)}>
+        <Smartphone size={20} aria-hidden /> Pakai kode aktivasi lain
+      </button>
+    );
+  return (
+    <div className="kartu">
+      <p className="tebal">Pakai kode aktivasi lain?</p>
+      <p className="redup">
+        Data di perangkat ini dihapus, lalu Anda memasukkan kode aktivasi baru. Data yang sudah terkirim tetap aman di server.
+      </p>
+      {menunggu > 0 && <KotakPesan jenis="kuning">Masih ada {menunggu} catatan belum terkirim. Kirim dulu dari layar Sinkronisasi.</KotakPesan>}
+      {galat && <KotakPesan jenis="merah">{galat}</KotakPesan>}
+      <div className="baris-aksi" style={{ marginTop: 8 }}>
+        <button className="tombol bahaya kecil" onClick={lepas} disabled={menunggu > 0}>
+          Ya, ganti kode
+        </button>
+        <button className="tombol kedua kecil" onClick={() => setTanya(false)}>
+          Batal
+        </button>
+      </div>
+    </div>
   );
 }
 

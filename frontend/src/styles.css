@@ -169,7 +169,7 @@ p {
   white-space: nowrap;
 }
 
-@media (max-width: 400px) {
+@media (max-width: 370px) {
   .nav-bawah a {
     font-size: 0.75rem;
   }
@@ -812,4 +812,181 @@ code.kode {
   background: var(--latar-2);
   padding: 2px 8px;
   border-radius: 6px;
+}
+
+/* --- Layar lebar (laptop dan tablet mendatar) ---------------------------------
+   Tampilan ponsel tetap utama (PRD 12). Di layar lebar, menu bawah diganti menu samping,
+   dan layar Masuk/Aktivasi dibagi dua kolom. */
+
+.nav-samping,
+.panel-merek {
+  display: none;
+}
+
+@media (min-width: 960px) {
+  body {
+    background: var(--latar-2);
+  }
+
+  .bingkai {
+    display: grid;
+    grid-template-columns: 248px minmax(0, 1fr);
+    min-height: 100dvh;
+  }
+
+  .nav-samping {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    position: sticky;
+    top: 0;
+    height: 100dvh;
+    padding: 24px 16px;
+    background: var(--latar);
+    border-right: 1px solid var(--garis);
+  }
+
+  .merek-samping {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--aksen);
+    padding: 0 8px;
+  }
+
+  .merek-samping strong {
+    font-size: 1.5rem;
+    font-weight: 800;
+    letter-spacing: 0.02em;
+  }
+
+  .profil-samping {
+    display: flex;
+    flex-direction: column;
+    padding: 12px;
+    border-radius: var(--sudut);
+    background: var(--latar-2);
+  }
+
+  .nav-samping nav {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .nav-samping nav a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-height: var(--sentuh);
+    padding: 0 12px;
+    border-radius: var(--sudut-kecil);
+    color: var(--teks-2);
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  .nav-samping nav a:hover {
+    background: var(--latar-2);
+  }
+
+  .nav-samping nav a.aktif {
+    background: var(--aksen-lembut);
+    color: var(--aksen);
+  }
+
+  .kaki-samping {
+    margin-top: auto;
+    padding: 0 8px;
+  }
+
+  .bingkai .layar {
+    width: 100%;
+    max-width: 720px;
+    margin: 0 auto;
+  }
+
+  .bingkai .layar.lebar {
+    max-width: none;
+  }
+
+  .bingkai .nav-bawah {
+    display: none;
+  }
+
+  .bingkai .kaki-tombol {
+    bottom: 0;
+    padding-bottom: 16px;
+  }
+
+  .toast {
+    bottom: 96px;
+  }
+
+  /* Masuk dan Aktivasi */
+  .layar-masuk {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    min-height: 100dvh;
+    background: var(--latar);
+  }
+
+  .layar-masuk .layar {
+    max-width: 480px;
+    margin: 0 auto;
+    border: 0;
+    width: 100%;
+  }
+
+  .panel-merek {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 28px;
+    padding: 64px clamp(40px, 6vw, 96px);
+    background: var(--aksen);
+    color: #fff;
+  }
+
+  .panel-merek .merek {
+    color: #fff;
+  }
+
+  /* Logo sudah tampil di panel kiri. */
+  .layar-masuk .masuk-isi > .merek {
+    display: none;
+  }
+
+  .panel-merek h2 {
+    font-size: 2rem;
+    line-height: 1.2;
+    font-weight: 800;
+    max-width: 18ch;
+  }
+
+  .panel-merek ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    font-size: 1.0625rem;
+  }
+
+  .panel-merek li {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+
+  .panel-merek li svg {
+    flex: none;
+    margin-top: 2px;
+  }
+
+  .panel-merek .catatan-panel {
+    color: #e3f1f3;
+    font-size: 0.9375rem;
+  }
 }

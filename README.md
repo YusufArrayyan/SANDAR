@@ -16,6 +16,8 @@ Seluruh nama, angka, dan harga pada data contoh bukan data lapangan.
 | `docs/UJI_RILIS.md` | Protokol uji rilis: uji otomatis, uji perangkat Android, uji kegunaan dan SUS |
 | `docs/PERUBAHAN_PRD.md` | Perubahan terhadap PRD yang sudah disetujui |
 | `docs/DEPLOY_GRATIS.md` | Deploy gratis di Render dan Neon |
+| `docs/PANDUAN_JURI.md` | Panduan mencoba SANDAR untuk juri |
+| `docs/mockup/` | Mockup tampilan ponsel untuk esai |
 | `render.yaml` | Blueprint Render |
 | `Dockerfile`, `docker-compose.yml` | Satu kontainer aplikasi, PostgreSQL, dan cadangan harian |
 
