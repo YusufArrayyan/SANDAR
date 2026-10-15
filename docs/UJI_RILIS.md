@@ -11,7 +11,7 @@ Dokumen ini memetakan syarat siap rilis PRD bagian 14 ke cara pengujiannya. Uji 
 | Contoh 7.2 menghasilkan angka sama di perangkat dan di server | `shared/kasus_pencocokan.json` di kedua sisi dan tes end-to-end | Lulus |
 | Skor SUS di atas 80 pada uji kegunaan | Bagian 4 | Belum |
 
-Versi 1.0 dinyatakan final setelah keempat baris berstatus lulus.
+Versi 1.0.0 dirilis untuk penilaian dan uji coba. Sebelum dipakai petani di lapangan, keempat baris di atas harus berstatus lulus.
 
 ## 2. Uji otomatis
 

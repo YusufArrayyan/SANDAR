@@ -45,7 +45,7 @@ async def lifespan(_: FastAPI) -> AsyncIterator[None]:
     tugas.cancel()
 
 
-app = FastAPI(title="SANDAR API", version="1.0.0-rc.1", lifespan=lifespan)
+app = FastAPI(title="SANDAR API", version="1.0.0", lifespan=lifespan)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=CORS_ORIGINS,

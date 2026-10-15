@@ -2,7 +2,7 @@
 
 Aplikasi web progresif (PWA) luring untuk koordinasi muatan kapal dan informasi harga bagi petani pisang pulau terluar. Dibangun dari PRD SANDAR versi 1.0 (lingkup final).
 
-**Status: kandidat rilis 1.0 (`v1.0.0-rc.1`).** Semua kebutuhan wajib sudah dibuat dan lulus uji otomatis. Versi 1.0 final setelah uji perangkat dan uji kegunaan di [docs/UJI_RILIS.md](docs/UJI_RILIS.md) lulus.
+**Status: versi 1.0.0 (final).** Semua kebutuhan wajib PRD sudah dibuat dan lulus uji otomatis, dan aplikasi berjalan di https://sandar-6mgj.onrender.com. Sebelum dipakai petani di lapangan, jalankan uji perangkat dan uji kegunaan di [docs/UJI_RILIS.md](docs/UJI_RILIS.md).
 
 Seluruh nama, angka, dan harga pada data contoh bukan data lapangan.
 
@@ -121,9 +121,9 @@ PRD tidak mengatur hal-hal berikut secara rinci, jadi implementasi memilih cara 
 
 Data lokal dilindungi enkripsi penyimpanan bawaan Android, bukan enkripsi oleh aplikasi. Setiap perangkat yang memakai SANDAR wajib memakai kunci layar. Alasannya ada di [docs/PERUBAHAN_PRD.md](docs/PERUBAHAN_PRD.md) (P-01). Bila perangkat hilang, nonaktifkan di Kelola, tab Perangkat.
 
-## Sebelum menjadi versi 1.0 final
+## Sebelum dipakai di lapangan
 
-Uji berikut harus dijalankan tim di lapangan dengan protokol dan lembar hasil di [docs/UJI_RILIS.md](docs/UJI_RILIS.md):
+Uji berikut dijalankan tim di lapangan dengan protokol dan lembar hasil di [docs/UJI_RILIS.md](docs/UJI_RILIS.md):
 
 - Uji perangkat di ponsel Android RAM 2 GB: mode pesawat, tutup paksa, daya padam, konflik dua perangkat, penyimpanan 14 hari.
 - Uji kegunaan dengan 3 sampai 5 pengguna dan skor SUS di atas 80.

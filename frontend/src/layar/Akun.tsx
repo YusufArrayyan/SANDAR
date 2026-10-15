@@ -52,7 +52,7 @@ export function Akun() {
       {menunggu > 0 && <p className="catatan-kaki">Catatan yang belum terkirim tetap tersimpan di perangkat setelah Anda keluar.</p>}
       <GantiKode menunggu={menunggu} />
       <p className="catatan-kaki" style={{ marginTop: 'auto' }}>
-        SANDAR versi 1.0.0-rc.1. Untuk memasang di layar utama, buka menu peramban lalu pilih Tambahkan ke layar utama.
+        SANDAR versi 1.0.0. Untuk memasang di layar utama, buka menu peramban lalu pilih Tambahkan ke layar utama.
       </p>
     </Layar>
   );
