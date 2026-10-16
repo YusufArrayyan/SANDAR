@@ -169,6 +169,13 @@ p {
   white-space: nowrap;
 }
 
+/* Layar dengan tombol kembali: ringkas chip agar judul tidak terpotong. */
+@media (max-width: 440px) {
+  .bilah-atas.ada-kembali .chip-kata {
+    display: none;
+  }
+}
+
 @media (max-width: 370px) {
   .nav-bawah a {
     font-size: 0.75rem;

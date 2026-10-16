@@ -158,7 +158,7 @@ export function Layar({ judul, kembali, children, tombol, nav = true, lebar }: P
     <div className="bingkai">
       <NavSamping />
     <div className={`layar${lebar ? ' lebar' : ''}${nav ? '' : ' tanpa-nav'}`}>
-      <header className="bilah-atas">
+      <header className={`bilah-atas${kembali ? ' ada-kembali' : ''}`}>
         {kembali && (
           <button
             className="tombol-ikon"
