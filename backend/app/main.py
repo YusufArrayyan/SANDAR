@@ -13,7 +13,7 @@ from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 
 from . import rute, sinkron
-from .config import CORS_ORIGINS, WEB_DIST
+from .config import CORS_ORIGINS, VERSI, WEB_DIST
 from .db import Base, SessionLocal, engine
 from .layanan import siapkan_penghitung
 from .rencana import hitung_ulang
@@ -45,7 +45,7 @@ async def lifespan(_: FastAPI) -> AsyncIterator[None]:
     tugas.cancel()
 
 
-app = FastAPI(title="SANDAR API", version="1.0.0", lifespan=lifespan)
+app = FastAPI(title="SANDAR API", version=VERSI, lifespan=lifespan)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=CORS_ORIGINS,

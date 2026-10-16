@@ -119,7 +119,7 @@ function NavSamping() {
   return (
     <aside className="nav-samping" aria-label="Navigasi utama">
       <div className="merek-samping">
-        <Ship size={30} strokeWidth={2} aria-hidden />
+        <img src="/logo.png" alt="" width={36} height={36} className="logo" />
         <strong>SANDAR</strong>
       </div>
       <div className="profil-samping">

@@ -52,6 +52,17 @@ Untuk demo atau uji coba sebelum data sungguhan dimasukkan, tambahkan variabel `
 
 Kode dan PIN contoh mudah ditebak. Jangan pakai data contoh untuk data petani sungguhan. Untuk berpindah ke data sungguhan, buat proyek Neon baru, ganti `SANDAR_DATABASE_URL`, hapus `SANDAR_DATA_CONTOH`, lalu isi `SANDAR_ADMIN_HP` dan `SANDAR_ADMIN_PIN`.
 
+## Mode demo terbuka untuk juri
+
+Tambahkan variabel `SANDAR_DEMO_TERBUKA` bernilai `1` di Render, tab **Environment**. Layar pertama SANDAR lalu menampilkan kartu **Mencoba SANDAR?**. Juri memilih peran (Pengelola simpul atau petani, Pengelola kapal, Mitra pasar) dan mengetuk akun contoh tanpa kode aktivasi.
+
+Batasan mode ini:
+- Perangkat demo hanya melihat data contoh Desa Meok, dan peran Admin tidak tersedia.
+- Percobaan dibatasi 20 kali per jam per jaringan.
+- Data contoh disegarkan setiap server menyala.
+
+Jangan nyalakan mode ini di server yang berisi data petani sungguhan.
+
 ## Kode aktivasi untuk juri
 
 Tambahkan variabel `SANDAR_JURI` berisi jumlah juri (misalnya `5`) di Render, tab **Environment**. Setiap server menyala:

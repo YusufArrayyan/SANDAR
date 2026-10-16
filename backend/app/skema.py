@@ -42,6 +42,10 @@ class KirimKeluar(BaseModel):
     waktu_server: str
 
 
+class DemoMasuk(BaseModel):
+    peran: Literal["simpul", "kapal", "mitra"]
+
+
 class AktivasiMasuk(BaseModel):
     kode: str
     nama_perangkat: str = ""

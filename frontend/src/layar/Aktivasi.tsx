@@ -1,15 +1,15 @@
-import { ListChecks, Ship, Tag, WifiOff } from 'lucide-react';
-import { useState, type FormEvent, type ReactNode } from 'react';
+import { ListChecks, Ship, Tag, Users, WifiOff } from 'lucide-react';
+import { useEffect, useState, type FormEvent, type ReactNode } from 'react';
 import { KotakPesan } from '../komponen/Umum';
 import { GalatJaringan } from '../lib/api';
 import { tulisMeta } from '../lib/db';
-import { aktifkanPerangkat } from '../lib/sesi';
+import { aktifkanDemo, aktifkanPerangkat, demoTersedia } from '../lib/sesi';
 import { ubahKeadaan } from '../lib/toko';
 
 export function Merek() {
   return (
     <div className="merek">
-      <Ship size={44} strokeWidth={2} aria-hidden />
+      <img src="/logo.png" alt="" width={52} height={52} className="logo" />
       <strong>SANDAR</strong>
     </div>
   );
@@ -45,6 +45,23 @@ export function Aktivasi() {
   const [kode, setKode] = useState('');
   const [galat, setGalat] = useState<string | null>(null);
   const [proses, setProses] = useState(false);
+  const [demo, setDemo] = useState(false);
+
+  useEffect(() => {
+    void demoTersedia().then(setDemo);
+  }, []);
+
+  async function cobaDemo(peran: 'simpul' | 'kapal' | 'mitra') {
+    setGalat(null);
+    setProses(true);
+    try {
+      await aktifkanDemo(peran);
+    } catch (err) {
+      setGalat(err instanceof GalatJaringan ? 'Demo butuh sinyal. Sambungkan perangkat lalu coba lagi.' : err instanceof Error ? err.message : String(err));
+    } finally {
+      setProses(false);
+    }
+  }
 
   async function kirim(e: FormEvent) {
     e.preventDefault();
@@ -98,6 +115,23 @@ export function Aktivasi() {
         <p className="catatan-kaki" style={{ textAlign: 'center' }}>
           Aktivasi butuh sinyal sekali. Setelah itu aplikasi bisa dibuka tanpa sinyal.
         </p>
+        {demo && (
+          <div className="kartu demo">
+            <h2>Mencoba SANDAR?</h2>
+            <p className="redup">Pilih peran untuk mencoba dengan data contoh, tanpa kode aktivasi.</p>
+            <div className="pilihan-demo">
+              <button type="button" className="tombol kedua" disabled={proses} onClick={() => cobaDemo('simpul')}>
+                <Users size={20} aria-hidden /> Pengelola simpul atau petani
+              </button>
+              <button type="button" className="tombol kedua" disabled={proses} onClick={() => cobaDemo('kapal')}>
+                <Ship size={20} aria-hidden /> Pengelola kapal
+              </button>
+              <button type="button" className="tombol kedua" disabled={proses} onClick={() => cobaDemo('mitra')}>
+                <Tag size={20} aria-hidden /> Mitra pasar
+              </button>
+            </div>
+          </div>
+        )}
       </form>
     </div>
     </BingkaiMasuk>

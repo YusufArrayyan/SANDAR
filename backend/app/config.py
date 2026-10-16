@@ -23,3 +23,9 @@ CORS_ORIGINS = [o for o in os.getenv("SANDAR_CORS", "http://localhost:5173").spl
 PIN_ITERASI = 60000
 
 MAKS_OP_PER_KIRIMAN = 50
+
+VERSI = "1.1.0"
+
+# Mode demo terbuka: pengunjung (misalnya juri) dapat mencoba SANDAR tanpa kode aktivasi,
+# hanya dengan data contoh. Jangan dinyalakan di server yang berisi data petani sungguhan.
+DEMO_TERBUKA = os.getenv("SANDAR_DEMO_TERBUKA") == "1"

@@ -18,7 +18,9 @@ from sqlalchemy.orm import Session
 
 from . import serial
 from .akses import wajib_peran
+from .config import DEMO_TERBUKA, VERSI
 from .db import get_db
+from .demo import PIN_DEMO, siapkan_data
 from .indikator import daftar_bulan, ringkasan
 from .layanan import audit, buat_kode_aktivasi, buat_token, hari_ini_wib, hash_pin, hash_token, iso_utc, parameter, tandai
 from .models import (
@@ -38,6 +40,7 @@ from .models import (
 from .rencana import hitung_ulang
 from .skema import (
     AktivasiMasuk,
+    DemoMasuk,
     DesaMasuk,
     DesaUbah,
     HargaMasuk,
@@ -88,6 +91,60 @@ def aktivasi(masuk: AktivasiMasuk, request: Request, db: Session = Depends(get_d
     kode.dipakai_oleh, kode.dipakai_pada = p.id, sekarang()
     db.commit()
     return {"token": token, "perangkat": {"id": p.id, "desa_id": p.desa_id, "pengguna_id": p.pengguna_id}}
+
+
+# --- Mode demo terbuka -------------------------------------------------------
+
+_DEMO_PER_IP: dict[str, list[float]] = defaultdict(list)
+MAKS_DEMO_PER_JAM = 20
+
+# Perangkat demo dan akun contoh yang dapat dipakai di perangkat itu (PIN contoh).
+_PERANGKAT_DEMO = {
+    "simpul": ("desa", "meok", ["Andi", "Rahmat"]),
+    "kapal": ("pengguna", "Darman", ["Darman"]),
+    "mitra": ("pengguna", "Mitra Pasar Minggu", ["Mitra Pasar Minggu"]),
+}
+
+
+@router.get("/info", tags=["auth"])
+def info() -> dict[str, Any]:
+    return {"versi": VERSI, "demo_terbuka": DEMO_TERBUKA}
+
+
+@router.post("/auth/demo", tags=["auth"])
+def aktivasi_demo(masuk: DemoMasuk, request: Request, db: Session = Depends(get_db)) -> dict[str, Any]:
+    """Mengaktifkan perangkat demo tanpa kode (hanya bila SANDAR_DEMO_TERBUKA=1)."""
+    if not DEMO_TERBUKA:
+        raise HTTPException(404, "Mode demo tidak tersedia di server ini.")
+    ip = request.client.host if request.client else "?"
+    kini = time.monotonic()
+    riwayat = [t for t in _DEMO_PER_IP[ip] if kini - t < 3600]
+    if len(riwayat) >= MAKS_DEMO_PER_JAM:
+        raise HTTPException(429, "Terlalu banyak percobaan demo dari jaringan ini. Coba lagi satu jam lagi.")
+    riwayat.append(kini)
+    _DEMO_PER_IP[ip] = riwayat
+
+    akun = siapkan_data(db)
+    jenis, kunci, nama_akun = _PERANGKAT_DEMO[masuk.peran]
+    target = akun.get(kunci)
+    if target is None:
+        raise HTTPException(409, "Data contoh belum lengkap. Coba lagi sebentar.")
+    token = buat_token()
+    p = Perangkat(
+        id=uuid.uuid4().hex,
+        nama=f"Demo terbuka ({masuk.peran})",
+        token_hash=hash_token(token),
+        desa_id=target.id if jenis == "desa" else None,
+        pengguna_id=target.id if jenis == "pengguna" else None,
+    )
+    db.add(p)
+    db.commit()
+    contoh = []
+    for nama in nama_akun:
+        u = akun.get(nama)
+        if isinstance(u, Pengguna):
+            contoh.append({"nama": u.nama, "hp": u.hp, "peran": u.peran, "pin": PIN_DEMO})
+    return {"token": token, "perangkat": {"id": p.id, "desa_id": p.desa_id, "pengguna_id": p.pengguna_id}, "akun_contoh": contoh}
 
 
 # --- Harga acuan (FR-40, FR-45) ---------------------------------------------

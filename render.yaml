@@ -18,6 +18,9 @@ services:
         sync: false
       - key: SANDAR_ADMIN_PIN
         sync: false
+      # Mode demo terbuka: juri mencoba tanpa kode aktivasi (hanya untuk server demo).
+      - key: SANDAR_DEMO_TERBUKA
+        value: "1"
       # Jumlah paket kode juri; data contoh PRD disegarkan setiap server menyala.
       - key: SANDAR_JURI
         value: "5"

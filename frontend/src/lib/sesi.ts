@@ -14,19 +14,22 @@ export async function muatAwal(): Promise<void> {
   if (perangkat) mulaiSinkronOtomatis();
 }
 
-/** FR-01: aktivasi satu kali. Butuh sinyal; setelah ini aplikasi dapat dibuka tanpa sinyal. */
-export async function aktifkanPerangkat(kode: string): Promise<void> {
-  const r = await panggil<{ token: string; perangkat: Omit<Perangkat, 'token'> }>('/auth/aktivasi', {
-    method: 'POST',
-    body: { kode: kode.trim().toUpperCase(), nama_perangkat: navigator.userAgent.slice(0, 80) },
-  });
-  const perangkat: Perangkat = { token: r.token, ...r.perangkat };
+export interface AkunContoh {
+  nama: string;
+  hp: string;
+  peran: Peran;
+  pin: string;
+}
+
+async function pasangPerangkat(token: string, info: Omit<Perangkat, 'token'>, akunContoh: AkunContoh[] | null): Promise<void> {
+  const perangkat: Perangkat = { token, ...info };
   // Perangkat baru: buang sisa data dari aktivasi sebelumnya, kecuali antrean yang belum terkirim.
   await db.transaction('rw', db.tables, async () => {
     for (const t of db.tables) {
       if (t.name !== 'outbox' && t.name !== 'galat') await t.clear();
     }
     await tulisMeta('perangkat', perangkat);
+    await tulisMeta('akunContoh', akunContoh);
   });
   // Ambil daftar akun lebih dulu; layar Masuk baru tampil setelah data akun ada di perangkat.
   await sinkronkan();
@@ -34,6 +37,32 @@ export async function aktifkanPerangkat(kode: string): Promise<void> {
   mulaiSinkronOtomatis();
   const galat = ambilKeadaan().galatTerakhir;
   if (galat) throw new Error(galat);
+}
+
+/** FR-01: aktivasi satu kali. Butuh sinyal; setelah ini aplikasi dapat dibuka tanpa sinyal. */
+export async function aktifkanPerangkat(kode: string): Promise<void> {
+  const r = await panggil<{ token: string; perangkat: Omit<Perangkat, 'token'> }>('/auth/aktivasi', {
+    method: 'POST',
+    body: { kode: kode.trim().toUpperCase(), nama_perangkat: navigator.userAgent.slice(0, 80) },
+  });
+  await pasangPerangkat(r.token, r.perangkat, null);
+}
+
+/** Mode demo terbuka: perangkat contoh tanpa kode, untuk juri atau pengunjung. */
+export async function aktifkanDemo(peran: 'simpul' | 'kapal' | 'mitra'): Promise<void> {
+  const r = await panggil<{ token: string; perangkat: Omit<Perangkat, 'token'>; akun_contoh: AkunContoh[] }>('/auth/demo', {
+    method: 'POST',
+    body: { peran },
+  });
+  await pasangPerangkat(r.token, r.perangkat, r.akun_contoh);
+}
+
+export async function demoTersedia(): Promise<boolean> {
+  try {
+    return (await panggil<{ demo_terbuka: boolean }>('/info')).demo_terbuka;
+  } catch {
+    return false;
+  }
 }
 
 export async function parameter(): Promise<Parameter> {

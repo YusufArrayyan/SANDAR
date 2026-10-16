@@ -103,6 +103,12 @@ def isi_awal_dari_lingkungan() -> None:
             else:
                 print("SANDAR_ADMIN_PIN harus 4 angka. Akun Admin tidak dibuat.")
 
+    if os.getenv("SANDAR_DEMO_TERBUKA") == "1":
+        # Data contoh untuk pengunjung mode demo, disegarkan setiap server menyala.
+        with SessionLocal() as db:
+            siapkan_data(db)
+            db.commit()
+
     jumlah_juri = os.getenv("SANDAR_JURI", "").strip()
     if jumlah_juri.isdigit() and int(jumlah_juri) > 0:
         with SessionLocal() as db:

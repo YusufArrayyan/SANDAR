@@ -5,7 +5,9 @@ import { layarAwal, masuk } from '../lib/sesi';
 import { ambilKeadaan } from '../lib/toko';
 import { BingkaiMasuk, Merek } from './Aktivasi';
 import { useLiveQuery } from 'dexie-react-hooks';
-import { db } from '../lib/db';
+import { bacaMeta, db } from '../lib/db';
+import { NAMA_PERAN } from '../lib/format';
+import type { AkunContoh } from '../lib/sesi';
 
 /** Layar Masuk (Gambar 2): nomor HP dan PIN 4 angka, diperiksa di perangkat. */
 export function Masuk() {
@@ -17,6 +19,7 @@ export function Masuk() {
   const lokasi = useLocation() as { state?: { dari?: string } };
   const refPin = useRef<HTMLInputElement>(null);
   const jumlahAkun = useLiveQuery(() => db.pengguna.count(), []);
+  const akunContoh = useLiveQuery(() => bacaMeta<AkunContoh[] | null>('akunContoh'), []);
 
   async function kirim(e?: FormEvent) {
     e?.preventDefault();
@@ -99,6 +102,28 @@ export function Masuk() {
         <p className="catatan-kaki" style={{ textAlign: 'center' }}>
           Setelah masuk pertama, aplikasi tetap bisa dibuka saat tidak ada sinyal.
         </p>
+        {akunContoh && akunContoh.length > 0 && (
+          <div className="kartu demo">
+            <h2>Akun contoh</h2>
+            <p className="redup">Ketuk untuk mengisi nomor HP dan PIN.</p>
+            <div className="pilihan-demo">
+              {akunContoh.map((a) => (
+                <button
+                  type="button"
+                  key={a.hp}
+                  className="tombol kedua"
+                  onClick={() => {
+                    setHp(a.hp);
+                    setPin(a.pin);
+                  }}
+                >
+                  {a.nama} · {NAMA_PERAN[a.peran]}
+                </button>
+              ))}
+            </div>
+            <p className="redup kecil">PIN semua akun contoh: {akunContoh[0].pin}</p>
+          </div>
+        )}
       </form>
     </div>
     </BingkaiMasuk>

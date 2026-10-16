@@ -13,6 +13,7 @@ const env = {
   ...process.env,
   SANDAR_DATABASE_URL: process.env.SANDAR_E2E_DATABASE_URL ?? `sqlite:///${join(mkdtempSync(join(tmpdir(), 'sandar-e2e-')), 'e2e.db')}`,
   SANDAR_WEB_DIST: join(akar, 'frontend', 'dist'),
+  SANDAR_DEMO_TERBUKA: process.env.SANDAR_DEMO_TERBUKA ?? '1',
 };
 
 const seed = spawnSync(python, ['-m', 'app.seed', '--demo', '--reset'], { cwd: backend, env, stdio: 'inherit' });

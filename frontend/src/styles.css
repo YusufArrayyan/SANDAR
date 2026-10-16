@@ -700,6 +700,11 @@ select.masukan {
   color: var(--aksen);
 }
 
+.logo {
+  flex: none;
+  object-fit: contain;
+}
+
 .merek strong {
   font-size: 2.75rem;
   font-weight: 800;
@@ -713,6 +718,27 @@ select.masukan {
   justify-content: center;
   gap: 20px;
   padding: 32px 24px;
+}
+
+/* --- Mode demo ------------------------------------------------------------------ */
+
+.kartu.demo {
+  gap: 8px;
+  background: var(--latar-2);
+  border-style: dashed;
+}
+
+.pilihan-demo {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.pilihan-demo .tombol {
+  min-height: var(--sentuh);
+  font-size: 1rem;
+  justify-content: flex-start;
 }
 
 /* --- Kelola (Admin, layar lebar) --------------------------------------------- */
@@ -950,6 +976,15 @@ code.kode {
 
   .panel-merek .merek {
     color: #fff;
+  }
+
+  /* Logo berwarna di atas lencana putih agar tetap jelas di latar teal. */
+  .panel-merek .logo {
+    background: #fff;
+    border-radius: 16px;
+    padding: 6px;
+    width: 64px;
+    height: 64px;
   }
 
   /* Logo sudah tampil di panel kiri. */

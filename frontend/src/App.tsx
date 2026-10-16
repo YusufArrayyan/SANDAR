@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import { useEffect, type ReactNode } from 'react';
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import { Memuat, Toast } from './komponen/Umum';
 import { layarAwal } from './lib/sesi';
@@ -22,6 +22,15 @@ function Wajib({ peran, children }: { peran?: Peran[]; children: ReactNode }) {
   return <>{children}</>;
 }
 
+/** Setiap pindah layar, mulai dari atas (satu tugas per layar). */
+function GulirKeAtas() {
+  const { pathname } = useLocation();
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+  return null;
+}
+
 export function App() {
   const siap = useKeadaan((k) => k.siap);
   const perangkat = useKeadaan((k) => k.perangkat);
@@ -42,6 +51,7 @@ export function App() {
   const semua: Peran[] = ['petani', 'simpul', 'kapal', 'mitra', 'admin'];
   return (
     <>
+      <GulirKeAtas />
       <Routes>
         <Route path="/masuk" element={pengguna ? <Navigate to={layarAwal(pengguna.peran)} replace /> : <Masuk />} />
         <Route path="/panen" element={<Wajib peran={['petani', 'simpul']}><DaftarPanen /></Wajib>} />

@@ -2,7 +2,7 @@
 
 Aplikasi web progresif (PWA) luring untuk koordinasi muatan kapal dan informasi harga bagi petani pisang pulau terluar. Dibangun dari PRD SANDAR versi 1.0 (lingkup final).
 
-**Status: versi 1.0.0 (final).** Semua kebutuhan wajib PRD sudah dibuat dan lulus uji otomatis, dan aplikasi berjalan di https://sandar-6mgj.onrender.com. Sebelum dipakai petani di lapangan, jalankan uji perangkat dan uji kegunaan di [docs/UJI_RILIS.md](docs/UJI_RILIS.md).
+**Status: versi 1.1.0.** Semua kebutuhan wajib PRD sudah dibuat dan lulus uji otomatis, dan aplikasi berjalan di https://sandar-6mgj.onrender.com. Sebelum dipakai petani di lapangan, jalankan uji perangkat dan uji kegunaan di [docs/UJI_RILIS.md](docs/UJI_RILIS.md).
 
 Seluruh nama, angka, dan harga pada data contoh bukan data lapangan.
 
@@ -16,7 +16,9 @@ Seluruh nama, angka, dan harga pada data contoh bukan data lapangan.
 | `docs/UJI_RILIS.md` | Protokol uji rilis: uji otomatis, uji perangkat Android, uji kegunaan dan SUS |
 | `docs/PERUBAHAN_PRD.md` | Perubahan terhadap PRD yang sudah disetujui |
 | `docs/DEPLOY_GRATIS.md` | Deploy gratis di Render dan Neon |
-| `docs/PANDUAN_JURI.md` | Panduan mencoba SANDAR untuk juri |
+| `docs/PANDUAN_PENGGUNAAN.md` | Cara penggunaan per peran |
+| `docs/PANDUAN_JURI.md` | Panduan mencoba SANDAR untuk juri (mode demo, tanpa kode) |
+| `docs/video/` | Video demo (layar lebar dan tegak) |
 | `docs/mockup/` | Mockup tampilan ponsel untuk esai |
 | `render.yaml` | Blueprint Render |
 | `Dockerfile`, `docker-compose.yml` | Satu kontainer aplikasi, PostgreSQL, dan cadangan harian |

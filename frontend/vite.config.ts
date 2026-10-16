@@ -10,7 +10,7 @@ export default defineConfig({
       // ditinggalkan, bukan di tengah pengisian formulir.
       registerType: 'prompt',
       injectRegister: false,
-      includeAssets: ['ikon.svg'],
+      includeAssets: ['favicon.ico', 'favicon-64.png', 'apple-touch-icon.png', 'logo.png'],
       manifest: {
         name: 'SANDAR',
         short_name: 'SANDAR',
@@ -25,12 +25,14 @@ export default defineConfig({
         icons: [
           { src: 'ikon-192.png', sizes: '192x192', type: 'image/png' },
           { src: 'ikon-512.png', sizes: '512x512', type: 'image/png' },
-          { src: 'ikon-512.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' },
+          { src: 'ikon-maskable-512.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' },
         ],
       },
       workbox: {
         // Hanya huruf Inter subset latin yang disimpan agar unduhan awal tetap kecil.
-        globPatterns: ['**/*.{js,css,html,svg,png}', '**/inter-latin-wght-normal-*.woff2'],
+        globPatterns: ['**/*.{js,css,html,svg,png,ico}', '**/inter-latin-wght-normal-*.woff2'],
+        // Ikon pemasangan tidak dibutuhkan saat luring.
+        globIgnores: ['**/ikon-*.png', '**/apple-touch-icon.png'],
         navigateFallback: '/index.html',
         navigateFallbackDenylist: [/^\/api\//],
         cleanupOutdatedCaches: true,
