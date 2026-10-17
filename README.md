@@ -18,7 +18,7 @@ Seluruh nama, angka, dan harga pada data contoh bukan data lapangan.
 | `docs/DEPLOY_GRATIS.md` | Deploy gratis di Render dan Neon |
 | `docs/PANDUAN_PENGGUNAAN.md` | Cara penggunaan per peran |
 | `docs/PANDUAN_JURI.md` | Panduan mencoba SANDAR untuk juri (mode demo, tanpa kode) |
-| `docs/video/` | Video demo (layar lebar dan tegak) |
+| `docs/video/` | Video demo dengan narasi dan takarir, serta versi tanpa suara |
 | `docs/mockup/` | Mockup tampilan ponsel untuk esai |
 | `render.yaml` | Blueprint Render |
 | `Dockerfile`, `docker-compose.yml` | Satu kontainer aplikasi, PostgreSQL, dan cadangan harian |

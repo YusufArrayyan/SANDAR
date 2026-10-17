@@ -1,7 +1,7 @@
 # Panduan mencoba SANDAR untuk juri
 
 **Alamat aplikasi:** https://sandar-6mgj.onrender.com
-**Video demo (1 menit 12 detik):** `docs/video/demo-sandar.mp4`
+**Video demo dengan narasi (2 menit 49 detik):** `docs/video/demo-sandar-suara.mp4`
 
 Tidak perlu kode aktivasi. Di layar pertama, pilih peran di kartu **Mencoba SANDAR?**, lalu ketuk salah satu **akun contoh** di layar Masuk. Nomor HP dan PIN terisi sendiri.
 

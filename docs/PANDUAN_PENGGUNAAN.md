@@ -2,7 +2,7 @@
 
 SANDAR membantu petani pisang pulau terluar mencatat panen, mendapat jatah ruang kapal yang adil, dan melihat harga acuan di daratan. Semua fungsi utama tetap berjalan tanpa sinyal.
 
-Video demo: [`docs/video/demo-sandar.mp4`](video/demo-sandar.mp4) (layar lebar) dan [`docs/video/demo-sandar-ponsel.mp4`](video/demo-sandar-ponsel.mp4) (tegak).
+Video demo: [`demo-sandar-suara.mp4`](video/demo-sandar-suara.mp4) dengan narasi (takarir: [`demo-sandar-suara.srt`](video/demo-sandar-suara.srt)), serta versi tanpa suara [`demo-sandar.mp4`](video/demo-sandar.mp4) dan [`demo-sandar-ponsel.mp4`](video/demo-sandar-ponsel.mp4) (tegak).
 
 ## Mulai memakai
 
