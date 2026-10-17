@@ -16,6 +16,7 @@ Seluruh nama, angka, dan harga pada data contoh bukan data lapangan.
 | `docs/UJI_RILIS.md` | Protokol uji rilis: uji otomatis, uji perangkat Android, uji kegunaan dan SUS |
 | `docs/PERUBAHAN_PRD.md` | Perubahan terhadap PRD yang sudah disetujui |
 | `docs/DEPLOY_GRATIS.md` | Deploy gratis di Render dan Neon |
+| `docs/SANDAR-Cara-Kerja.pdf` | Cara kerja SANDAR dalam 10 halaman bergambar (sumber: `docs/cara-kerja/`) |
 | `docs/PANDUAN_PENGGUNAAN.md` | Cara penggunaan per peran |
 | `docs/PANDUAN_JURI.md` | Panduan mencoba SANDAR untuk juri (mode demo, tanpa kode) |
 | `docs/video/` | Video demo dengan narasi dan takarir, serta versi tanpa suara |

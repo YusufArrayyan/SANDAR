@@ -1,0 +1,554 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<title>Cara Kerja SANDAR</title>
+<style>
+@font-face { font-family: Inter; src: url('../../frontend/node_modules/@fontsource-variable/inter/files/inter-latin-wght-normal.woff2') format('woff2'); font-weight: 100 900; }
+@page { size: A4; margin: 0; }
+:root {
+  --aksen: #0e6e7e; --aksen-tua: #0a5966; --aksen-lembut: #e3f1f3;
+  --teks: #1b2733; --teks-2: #5b6b78; --garis: #dfe5e9; --latar-2: #f3f6f8;
+  --hijau: #1c6b3a; --hijau-l: #e3f3e8; --kuning: #7a4b00; --kuning-l: #fdf0cf;
+  --abu: #4a5a67; --abu-l: #e8edf0; --merah: #a3261b; --merah-l: #fbe6e3;
+  --oranye: #f2b01e; --daun: #2f8f4e; --laut: #1a8fd8;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { font-family: Inter, system-ui, sans-serif; color: var(--teks); font-size: 10.5pt; line-height: 1.5; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+.halaman { width: 210mm; height: 297mm; padding: 18mm 18mm 16mm; position: relative; overflow: hidden; page-break-after: always; break-after: page; }
+.halaman:last-child { page-break-after: auto; break-after: auto; }
+.kaki { position: absolute; left: 18mm; right: 18mm; bottom: 9mm; display: flex; justify-content: space-between; font-size: 8pt; color: var(--teks-2); border-top: 1px solid var(--garis); padding-top: 2.5mm; }
+.kaki b { color: var(--aksen); font-weight: 700; }
+.label { display: inline-block; font-size: 8pt; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--aksen); background: var(--aksen-lembut); border-radius: 99px; padding: 1.2mm 3.2mm; }
+h1 { font-size: 24pt; line-height: 1.15; font-weight: 800; letter-spacing: -.01em; margin: 3mm 0 3mm; }
+h2 { font-size: 13pt; font-weight: 800; margin: 6mm 0 2.5mm; }
+h3 { font-size: 11pt; font-weight: 700; margin-bottom: 1mm; }
+p { margin-bottom: 2.5mm; }
+.pengantar { font-size: 12pt; color: var(--abu); max-width: 160mm; }
+.redup { color: var(--teks-2); }
+.kecil { font-size: 8.8pt; }
+.tebal { font-weight: 700; }
+.kisi-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 5mm; }
+.kisi-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4mm; }
+.kartu { border: 1px solid var(--garis); border-radius: 3.5mm; padding: 4mm 4.5mm; background: #fff; }
+.kartu.isi { background: var(--latar-2); border-color: transparent; }
+.kartu.aksen { background: var(--aksen-lembut); border-color: transparent; }
+.ringkas .kartu { padding: 3mm 4mm; }
+.ringkas .angka { font-size: 16pt; }
+.angka { font-size: 22pt; font-weight: 800; color: var(--aksen); line-height: 1.1; }
+.ikon-bulat { width: 10mm; height: 10mm; border-radius: 50%; background: var(--aksen-lembut); color: var(--aksen); display: flex; align-items: center; justify-content: center; margin-bottom: 2mm; }
+.ikon-bulat svg { width: 5.5mm; height: 5.5mm; }
+ul.rapi { list-style: none; }
+ul.rapi li { padding-left: 5mm; position: relative; margin-bottom: 1.6mm; }
+ul.rapi li::before { content: ''; position: absolute; left: 0; top: 2.1mm; width: 2mm; height: 2mm; border-radius: 50%; background: var(--aksen); }
+table { width: 100%; border-collapse: collapse; font-size: 9.2pt; }
+th, td { text-align: left; padding: 2mm 2.5mm; border-bottom: 1px solid var(--garis); vertical-align: top; }
+th { background: var(--latar-2); font-weight: 700; color: var(--abu); }
+td.angka-sel, th.angka-sel { text-align: right; }
+.lencana { display: inline-flex; align-items: center; gap: 1mm; border-radius: 99px; padding: .6mm 2.4mm; font-size: 8pt; font-weight: 700; white-space: nowrap; }
+.l-hijau { background: var(--hijau-l); color: var(--hijau); } .l-kuning { background: var(--kuning-l); color: var(--kuning); }
+.l-abu { background: var(--abu-l); color: var(--abu); } .l-aksen { background: var(--aksen-lembut); color: var(--aksen); } .l-merah { background: var(--merah-l); color: var(--merah); }
+.hp { width: 100%; display: block; }
+.catatan { font-size: 8.5pt; color: var(--teks-2); border-left: 3px solid var(--aksen); padding-left: 3mm; margin-top: 3mm; }
+
+/* Sampul */
+.sampul { background: linear-gradient(160deg, #0e6e7e 0%, #0a5966 58%, #083f49 100%); color: #fff; padding: 22mm 20mm; }
+.sampul .merek { display: flex; align-items: center; gap: 4mm; }
+.sampul .merek .lencana-logo { width: 22mm; height: 22mm; background: #fff; border-radius: 6mm; padding: 2.2mm; }
+.sampul .merek .lencana-logo img { width: 100%; height: 100%; object-fit: contain; }
+.sampul .merek b { font-size: 26pt; font-weight: 800; letter-spacing: .03em; }
+.sampul h1 { font-size: 40pt; margin-top: 16mm; line-height: 1.05; }
+.sampul .sub { font-size: 14pt; color: #d6ecef; max-width: 150mm; margin-top: 4mm; line-height: 1.4; }
+.sampul .ponsel { position: absolute; left: 0; right: 0; bottom: 30mm; display: flex; justify-content: center; gap: 6mm; }
+.sampul .ponsel img { width: 52mm; filter: drop-shadow(0 6mm 8mm rgba(0,0,0,.35)); }
+.sampul .ponsel img:nth-child(2) { width: 58mm; margin-top: -8mm; }
+.sampul .bawah { position: absolute; left: 20mm; right: 20mm; bottom: 12mm; display: flex; justify-content: space-between; font-size: 9pt; color: #bfe0e5; }
+</style>
+</head>
+<body>
+
+<!-- 1. SAMPUL -->
+<section class="halaman sampul">
+  <div class="merek"><span class="lencana-logo"><img src="logo.png" alt=""></span><b>SANDAR</b></div>
+  <h1>Cara Kerja<br>SANDAR</h1>
+  <p class="sub">Aplikasi luring untuk koordinasi muatan kapal dan informasi harga bagi petani pisang pulau terluar.</p>
+  <div class="ponsel">
+    <img src="../mockup/layar-02-panen-luring.png" alt="">
+    <img src="../mockup/layar-04-jatah.png" alt="">
+    <img src="../mockup/layar-05-harga.png" alt="">
+  </div>
+  <div class="bawah"><span>Versi 1.1.0 · Oktober 2026</span><span>sandar-6mgj.onrender.com</span></div>
+</section>
+
+<!-- 2. GAMBARAN UMUM -->
+<section class="halaman">
+  <span class="label">Gambaran umum</span>
+  <h1>Dari kebun ke kapal, tanpa menunggu sinyal</h1>
+  <p class="pengantar">Pelayaran ke Pulau Enggano sering terhenti oleh pendangkalan alur pelabuhan dan cuaca, sementara listrik dan internet di pulau tidak stabil. SANDAR mempertemukan hasil panen petani dengan ruang muat kapal, membagi ruang yang terbatas secara adil, dan menampilkan harga di daratan.</p>
+
+  <h2>Masalah yang diselesaikan</h2>
+  <div class="kisi-2">
+    <div class="kartu isi"><h3>Jadwal dan ruang kapal tidak sampai ke petani</h3><p class="kecil redup">Petani membawa panen ke pelabuhan tanpa kepastian muat.</p></div>
+    <div class="kartu isi"><h3>Panen siap angkut tidak tercatat</h3><p class="kecil redup">Pengelola kapal tidak tahu volume yang harus diangkut.</p></div>
+    <div class="kartu isi"><h3>Harga di daratan tidak diketahui</h3><p class="kecil redup">Posisi tawar petani lemah terhadap pedagang bermodal besar.</p></div>
+    <div class="kartu isi"><h3>Aplikasi lain menuntut sinyal stabil</h3><p class="kecil redup">Layanan digital berhenti saat listrik dan sinyal putus.</p></div>
+  </div>
+
+  <h2>Empat modul yang bekerja berurutan</h2>
+  <svg viewBox="0 0 680 190" width="100%" style="display:block">
+    <defs><marker id="p1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#0e6e7e"/></marker></defs>
+    <g font-family="Inter" text-anchor="middle">
+      <g transform="translate(0,20)">
+        <rect width="150" height="150" rx="16" fill="#e3f1f3"/>
+        <g transform="translate(55,18)" fill="none" stroke="#0e6e7e" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 3 37 12v18L20 39 3 30V12z"/><path d="M3 12l17 9 17-9M20 21v18"/></g>
+        <text x="75" y="88" font-size="17" font-weight="800" fill="#1b2733">Panen</text>
+        <text x="75" y="110" font-size="11.5" fill="#4a5a67">Catat komoditas,</text><text x="75" y="125" font-size="11.5" fill="#4a5a67">jumlah tandan, dan</text><text x="75" y="140" font-size="11.5" fill="#4a5a67">tanggal siap angkut</text>
+      </g>
+      <line x1="153" y1="95" x2="174" y2="95" stroke="#0e6e7e" stroke-width="3" marker-end="url(#p1)"/>
+      <g transform="translate(176,20)">
+        <rect width="150" height="150" rx="16" fill="#e3f1f3"/>
+        <g transform="translate(53,20)" fill="none" stroke="#0e6e7e" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 26h36l-5 10H9z"/><path d="M10 26v-9h24v9"/><path d="M17 17v-7h10v7"/></g>
+        <text x="75" y="88" font-size="17" font-weight="800" fill="#1b2733">Ruang Muat</text>
+        <text x="75" y="110" font-size="11.5" fill="#4a5a67">Jadwal berangkat,</text><text x="75" y="125" font-size="11.5" fill="#4a5a67">sisa ruang, dan tarif</text><text x="75" y="140" font-size="11.5" fill="#4a5a67">dari pengelola kapal</text>
+      </g>
+      <line x1="329" y1="95" x2="350" y2="95" stroke="#0e6e7e" stroke-width="3" marker-end="url(#p1)"/>
+      <g transform="translate(352,20)">
+        <rect width="150" height="150" rx="16" fill="#0e6e7e"/>
+        <g transform="translate(55,20)" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l4 4 7-8M3 26l4 4 7-8M20 8h18M20 26h18"/></g>
+        <text x="75" y="88" font-size="17" font-weight="800" fill="#fff">Pencocokan</text>
+        <text x="75" y="110" font-size="11.5" fill="#d6ecef">Ruang kapal dibagi</text><text x="75" y="125" font-size="11.5" fill="#d6ecef">proporsional, sisanya</text><text x="75" y="140" font-size="11.5" fill="#d6ecef">masuk daftar tunggu</text>
+      </g>
+      <line x1="505" y1="95" x2="526" y2="95" stroke="#0e6e7e" stroke-width="3" marker-end="url(#p1)"/>
+      <g transform="translate(528,20)">
+        <rect width="150" height="150" rx="16" fill="#e3f1f3"/>
+        <g transform="translate(56,19)" fill="none" stroke="#0e6e7e" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4h16l18 18-15 15L4 19z"/><circle cx="12" cy="12" r="2.5" fill="#0e6e7e"/></g>
+        <text x="75" y="88" font-size="17" font-weight="800" fill="#1b2733">Harga Acuan</text>
+        <text x="75" y="110" font-size="11.5" fill="#4a5a67">Harga Kota Bengkulu</text><text x="75" y="125" font-size="11.5" fill="#4a5a67">dan sisa hasil</text><text x="75" y="140" font-size="11.5" fill="#4a5a67">per tandan</text>
+      </g>
+    </g>
+  </svg>
+
+  <h2>Prinsip yang dipegang</h2>
+  <div class="kisi-3">
+    <div class="kartu"><div class="ikon-bulat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M2 2l20 20M8.5 16.5a5 5 0 0 1 7 0M5 13a10 10 0 0 1 5.2-2.8M19 13a10 10 0 0 0-2-1.6M2 8.8a15 15 0 0 1 4.2-2.6M22 8.8A15 15 0 0 0 10.7 5M12 20h.01"/></svg></div><h3>Luring lebih dulu</h3><p class="kecil redup">Semua aksi tersimpan di ponsel dan langsung berhasil. Pengiriman menyusul saat sinyal ada.</p></div>
+    <div class="kartu"><div class="ikon-bulat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 3v18M5 7h14M5 7l-3 7a4 4 0 0 0 6 0zM19 7l-3 7a4 4 0 0 0 6 0z"/></svg></div><h3>Adil dan dapat diperiksa</h3><p class="kecil redup">Aturan pembagian sederhana, tertulis di layar, dan bisa dihitung ulang dengan tangan.</p></div>
+    <div class="kartu"><div class="ikon-bulat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><rect x="6" y="2" width="12" height="20" rx="2.5"/><path d="M11 18h2"/></svg></div><h3>Satu tugas per layar</h3><p class="kecil redup">Dirancang untuk ponsel murah dan pengguna yang tidak terbiasa dengan aplikasi rumit.</p></div>
+  </div>
+  <div class="kaki"><span><b>SANDAR</b> · Cara Kerja</span><span>2</span></div>
+</section>
+
+<!-- 3. SIAPA MEMAKAI -->
+<section class="halaman">
+  <span class="label">Pengguna</span>
+  <h1>Lima peran, satu simpul di tiap desa</h1>
+  <p class="pengantar">Setiap peran melihat layar yang berbeda sesuai tugasnya. Petani yang tidak memiliki ponsel pintar dilayani <b>simpul desa</b>: satu perangkat yang dipegang pengelola dari koperasi desa atau kelompok tani.</p>
+
+  <svg viewBox="0 0 680 300" width="100%" style="display:block;margin:4mm 0 2mm">
+    <defs><marker id="p2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0L10 5L0 10z" fill="#5b6b78"/></marker></defs>
+    <g font-family="Inter">
+      <!-- Desa -->
+      <rect x="0" y="10" width="300" height="280" rx="18" fill="#f3f6f8"/>
+      <text x="20" y="40" font-size="12" font-weight="700" fill="#5b6b78" letter-spacing="1.5">DESA DI PULAU ENGGANO</text>
+      <g transform="translate(20,60)">
+        <rect width="260" height="70" rx="12" fill="#fff" stroke="#dfe5e9"/>
+        <circle cx="35" cy="35" r="20" fill="#e3f3e8"/><text x="35" y="40" text-anchor="middle" font-size="14" font-weight="800" fill="#1c6b3a">P</text>
+        <text x="66" y="30" font-size="14" font-weight="700" fill="#1b2733">Petani</text>
+        <text x="66" y="50" font-size="11" fill="#5b6b78">Catat panen, lihat jatah dan harga</text>
+      </g>
+      <g transform="translate(20,150)">
+        <rect width="260" height="120" rx="12" fill="#0e6e7e"/>
+        <circle cx="35" cy="35" r="20" fill="#fff"/><text x="35" y="40" text-anchor="middle" font-size="14" font-weight="800" fill="#0e6e7e">S</text>
+        <text x="66" y="30" font-size="14" font-weight="700" fill="#fff">Pengelola simpul</text>
+        <text x="66" y="50" font-size="11" fill="#d6ecef">Perangkat bersama satu desa</text>
+        <text x="20" y="80" font-size="11" fill="#fff">• Catat panen atas nama petani</text>
+        <text x="20" y="97" font-size="11" fill="#fff">• Jalankan pencocokan, tandai terangkut</text>
+        <text x="20" y="114" font-size="11" fill="#fff">• Isi biaya tebang dan angkut darat</text>
+      </g>
+      <!-- Server -->
+      <rect x="380" y="100" width="150" height="100" rx="18" fill="#1b2733"/>
+      <text x="455" y="140" text-anchor="middle" font-size="14" font-weight="800" fill="#fff">Server</text>
+      <text x="455" y="160" text-anchor="middle" font-size="11" fill="#bfc9d1">di daratan</text>
+      <text x="455" y="178" text-anchor="middle" font-size="11" fill="#bfc9d1">menghitung Final</text>
+      <line x1="302" y1="150" x2="376" y2="150" stroke="#5b6b78" stroke-width="2.5" stroke-dasharray="6 5" marker-end="url(#p2)"/>
+      <line x1="376" y1="150" x2="302" y2="150" stroke="#5b6b78" stroke-width="2.5" stroke-dasharray="6 5" marker-end="url(#p2)"/>
+      <text x="340" y="140" text-anchor="middle" font-size="10" fill="#5b6b78">saat ada</text><text x="340" y="170" text-anchor="middle" font-size="10" fill="#5b6b78">sinyal</text>
+      <!-- Peran lain -->
+      <g transform="translate(560,20)">
+        <rect width="120" height="80" rx="12" fill="#fff" stroke="#dfe5e9"/>
+        <text x="60" y="34" text-anchor="middle" font-size="13" font-weight="700" fill="#1b2733">Pengelola</text><text x="60" y="52" text-anchor="middle" font-size="13" font-weight="700" fill="#1b2733">kapal</text>
+        <text x="60" y="69" text-anchor="middle" font-size="10" fill="#5b6b78">jadwal, ruang, tarif</text>
+      </g>
+      <g transform="translate(560,110)">
+        <rect width="120" height="80" rx="12" fill="#fff" stroke="#dfe5e9"/>
+        <text x="60" y="34" text-anchor="middle" font-size="13" font-weight="700" fill="#1b2733">Mitra pasar</text>
+        <text x="60" y="52" text-anchor="middle" font-size="10" fill="#5b6b78">Kota Bengkulu</text>
+        <text x="60" y="68" text-anchor="middle" font-size="10" fill="#5b6b78">harga per tandan</text>
+      </g>
+      <g transform="translate(560,200)">
+        <rect width="120" height="80" rx="12" fill="#fff" stroke="#dfe5e9"/>
+        <text x="60" y="34" text-anchor="middle" font-size="13" font-weight="700" fill="#1b2733">Admin</text>
+        <text x="60" y="52" text-anchor="middle" font-size="10" fill="#5b6b78">akun, desa, kapal,</text>
+        <text x="60" y="68" text-anchor="middle" font-size="10" fill="#5b6b78">indikator</text>
+      </g>
+      <line x1="534" y1="130" x2="556" y2="70" stroke="#5b6b78" stroke-width="2" marker-end="url(#p2)"/>
+      <line x1="534" y1="150" x2="556" y2="150" stroke="#5b6b78" stroke-width="2" marker-end="url(#p2)"/>
+      <line x1="534" y1="170" x2="556" y2="232" stroke="#5b6b78" stroke-width="2" marker-end="url(#p2)"/>
+    </g>
+  </svg>
+
+  <table>
+    <tr><th style="width:24%">Peran</th><th style="width:28%">Siapa</th><th>Layar utama</th></tr>
+    <tr><td class="tebal">Petani</td><td>Petani pisang dengan ponsel sendiri</td><td>Panen, Jatah, Harga. Hanya melihat catatannya sendiri.</td></tr>
+    <tr><td class="tebal">Pengelola simpul</td><td>Pemuda desa dari koperasi atau kelompok tani</td><td>Panen seluruh desa, Jatah (jalankan pencocokan), Harga (biaya tebang)</td></tr>
+    <tr><td class="tebal">Pengelola kapal</td><td>Pemilik atau awak feri, kapal perintis, kapal nelayan</td><td>Ruang Muat: catat keberangkatan, sisa ruang, tarif, status</td></tr>
+    <tr><td class="tebal">Mitra pasar</td><td>Pedagang atau pengelola pasar di Kota Bengkulu</td><td>Input harga per tandan</td></tr>
+    <tr><td class="tebal">Admin</td><td>Tim pengembang dan pendamping perguruan tinggi</td><td>Kelola: akun, desa, kapal, kode aktivasi, parameter, ringkasan indikator</td></tr>
+  </table>
+  <div class="kaki"><span><b>SANDAR</b> · Cara Kerja</span><span>3</span></div>
+</section>
+
+<!-- 4. ALUR UTAMA -->
+<section class="halaman">
+  <span class="label">Alur kerja</span>
+  <h1>Dari panen sampai naik kapal</h1>
+  <p class="pengantar">Enam langkah ini berjalan berulang setiap ada kapal. Langkah 1, 2, 4, 5, dan 6 tetap bisa dilakukan tanpa sinyal.</p>
+
+  <div style="display:grid;grid-template-columns:1fr 44mm;gap:8mm;margin-top:4mm">
+    <svg viewBox="0 0 420 640" width="100%" style="display:block">
+      <g font-family="Inter">
+        <line x1="26" y1="30" x2="26" y2="610" stroke="#dfe5e9" stroke-width="4"/>
+        <g transform="translate(0,10)">
+          <circle cx="26" cy="20" r="20" fill="#0e6e7e"/><text x="26" y="26" text-anchor="middle" font-size="16" font-weight="800" fill="#fff">1</text>
+          <text x="62" y="18" font-size="15" font-weight="800" fill="#1b2733">Catat panen</text>
+          <text x="62" y="38" font-size="11.5" fill="#5b6b78">Pengelola simpul atau petani mencatat jumlah tandan</text>
+          <text x="62" y="54" font-size="11.5" fill="#5b6b78">dan tanggal siap angkut. Tersimpan di ponsel.</text>
+        </g>
+        <g transform="translate(0,110)">
+          <circle cx="26" cy="20" r="20" fill="#0e6e7e"/><text x="26" y="26" text-anchor="middle" font-size="16" font-weight="800" fill="#fff">2</text>
+          <text x="62" y="18" font-size="15" font-weight="800" fill="#1b2733">Catat keberangkatan</text>
+          <text x="62" y="38" font-size="11.5" fill="#5b6b78">Pengelola kapal mengisi waktu berangkat, sisa ruang</text>
+          <text x="62" y="54" font-size="11.5" fill="#5b6b78">dalam tandan, dan tarif per tandan.</text>
+        </g>
+        <g transform="translate(0,210)">
+          <circle cx="26" cy="20" r="20" fill="#1a8fd8"/><text x="26" y="26" text-anchor="middle" font-size="16" font-weight="800" fill="#fff">3</text>
+          <text x="62" y="18" font-size="15" font-weight="800" fill="#1b2733">Sinkron saat ada sinyal</text>
+          <text x="62" y="38" font-size="11.5" fill="#5b6b78">Ponsel mengirim catatan dan menerima data kapal,</text>
+          <text x="62" y="54" font-size="11.5" fill="#5b6b78">harga terbaru, serta hasil pencocokan Final.</text>
+        </g>
+        <g transform="translate(0,310)">
+          <circle cx="26" cy="20" r="20" fill="#0e6e7e"/><text x="26" y="26" text-anchor="middle" font-size="16" font-weight="800" fill="#fff">4</text>
+          <text x="62" y="18" font-size="15" font-weight="800" fill="#1b2733">Jalankan pencocokan</text>
+          <text x="62" y="38" font-size="11.5" fill="#5b6b78">Pengelola simpul memilih kapal. Ruang dibagi adil,</text>
+          <text x="62" y="54" font-size="11.5" fill="#5b6b78">petani melihat jatahnya.</text>
+        </g>
+        <g transform="translate(0,410)">
+          <circle cx="26" cy="20" r="20" fill="#0e6e7e"/><text x="26" y="26" text-anchor="middle" font-size="16" font-weight="800" fill="#fff">5</text>
+          <text x="62" y="18" font-size="15" font-weight="800" fill="#1b2733">Lihat harga dan putuskan</text>
+          <text x="62" y="38" font-size="11.5" fill="#5b6b78">Petani melihat sisa hasil per tandan, lalu memutuskan</text>
+          <text x="62" y="54" font-size="11.5" fill="#5b6b78">menjual atau menunda.</text>
+        </g>
+        <g transform="translate(0,510)">
+          <circle cx="26" cy="20" r="20" fill="#2f8f4e"/><text x="26" y="26" text-anchor="middle" font-size="16" font-weight="800" fill="#fff">6</text>
+          <text x="62" y="18" font-size="15" font-weight="800" fill="#1b2733">Tandai terangkut</text>
+          <text x="62" y="38" font-size="11.5" fill="#5b6b78">Setelah muatan naik kapal, pengelola simpul menandai</text>
+          <text x="62" y="54" font-size="11.5" fill="#5b6b78">Terangkut dan boleh mengisi harga terima.</text>
+          <text x="62" y="78" font-size="11.5" fill="#5b6b78">Sisa yang belum terangkut tetap di daftar tunggu</text>
+          <text x="62" y="94" font-size="11.5" fill="#5b6b78">dan ikut kapal berikutnya.</text>
+        </g>
+      </g>
+    </svg>
+    <div style="display:flex;flex-direction:column;gap:4mm">
+      <img class="hp" src="../mockup/layar-03-catat-panen.png" alt="">
+      <img class="hp" src="../mockup/layar-06-ruang-muat.png" alt="">
+    </div>
+  </div>
+  <div class="kaki"><span><b>SANDAR</b> · Cara Kerja</span><span>4</span></div>
+</section>
+
+<!-- 5. LURING -->
+<section class="halaman">
+  <span class="label">Bekerja tanpa sinyal</span>
+  <h1>Tulis dulu di ponsel, kirim belakangan</h1>
+  <p class="pengantar">Setiap catatan ditulis ke penyimpanan ponsel sebelum tanda "Tersimpan" muncul. Catatan tidak hilang walau aplikasi ditutup paksa atau daya padam, lalu terkirim sendiri saat sinyal kembali.</p>
+
+  <svg viewBox="0 0 680 300" width="100%" style="display:block;margin-top:3mm">
+    <defs>
+      <marker id="p3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#4a5a67"/></marker>
+      <marker id="p4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#1a8fd8"/></marker>
+    </defs>
+    <g font-family="Inter">
+      <rect x="0" y="10" width="290" height="280" rx="18" fill="#f3f6f8"/>
+      <text x="18" y="38" font-size="11.5" font-weight="700" fill="#5b6b78" letter-spacing="1.5">PONSEL · BISA LURING</text>
+      <rect x="30" y="54" width="230" height="58" rx="12" fill="#fff" stroke="#1b2733" stroke-width="1.6"/>
+      <text x="145" y="79" text-anchor="middle" font-size="14" font-weight="700" fill="#1b2733">Layar aplikasi</text>
+      <text x="145" y="98" text-anchor="middle" font-size="10.5" fill="#5b6b78">catat panen, pencocokan Sementara</text>
+      <line x1="145" y1="114" x2="145" y2="140" stroke="#4a5a67" stroke-width="2.2" marker-end="url(#p3)"/>
+      <rect x="30" y="142" width="230" height="58" rx="12" fill="#e3f1f3" stroke="#0e6e7e" stroke-width="1.6"/>
+      <text x="145" y="167" text-anchor="middle" font-size="14" font-weight="700" fill="#0e6e7e">Penyimpanan ponsel</text>
+      <text x="145" y="186" text-anchor="middle" font-size="10.5" fill="#0a5966">data desa + antrean kirim</text>
+      <line x1="145" y1="202" x2="145" y2="228" stroke="#4a5a67" stroke-width="2.2" marker-end="url(#p3)"/>
+      <rect x="30" y="230" width="230" height="46" rx="12" fill="#fff" stroke="#1b2733" stroke-width="1.6"/>
+      <text x="145" y="258" text-anchor="middle" font-size="13" font-weight="700" fill="#1b2733">Pekerja sinkron</text>
+
+      <rect x="390" y="10" width="290" height="280" rx="18" fill="#f3f6f8"/>
+      <text x="408" y="38" font-size="11.5" font-weight="700" fill="#5b6b78" letter-spacing="1.5">SERVER DI DARATAN</text>
+      <rect x="420" y="54" width="230" height="58" rx="12" fill="#fdf0cf" stroke="#c98a12" stroke-width="1.6"/>
+      <text x="535" y="79" text-anchor="middle" font-size="14" font-weight="700" fill="#7a4b00">Pencocokan Final</text>
+      <text x="535" y="98" text-anchor="middle" font-size="10.5" fill="#7a4b00">data semua desa, dikunci</text>
+      <line x1="535" y1="140" x2="535" y2="114" stroke="#4a5a67" stroke-width="2.2" marker-end="url(#p3)"/>
+      <rect x="420" y="142" width="230" height="58" rx="12" fill="#e8edf0" stroke="#4a5a67" stroke-width="1.6"/>
+      <text x="535" y="167" text-anchor="middle" font-size="14" font-weight="700" fill="#1b2733">Basis data</text>
+      <text x="535" y="186" text-anchor="middle" font-size="10.5" fill="#4a5a67">PostgreSQL</text>
+      <line x1="535" y1="228" x2="535" y2="202" stroke="#4a5a67" stroke-width="2.2" marker-end="url(#p3)"/>
+      <rect x="420" y="230" width="230" height="46" rx="12" fill="#fff" stroke="#1b2733" stroke-width="1.6"/>
+      <text x="535" y="258" text-anchor="middle" font-size="13" font-weight="700" fill="#1b2733">API sinkron (HTTPS)</text>
+
+      <line x1="264" y1="246" x2="414" y2="246" stroke="#1a8fd8" stroke-width="2.6" stroke-dasharray="7 6" marker-end="url(#p4)"/>
+      <line x1="414" y1="262" x2="264" y2="262" stroke="#1a8fd8" stroke-width="2.6" stroke-dasharray="7 6" marker-end="url(#p4)"/>
+      <text x="340" y="228" text-anchor="middle" font-size="10.5" font-weight="700" fill="#1a8fd8">kirim antrean</text>
+      <text x="340" y="284" text-anchor="middle" font-size="10.5" font-weight="700" fill="#1a8fd8">ambil perubahan</text>
+      <text x="340" y="150" text-anchor="middle" font-size="10.5" fill="#5b6b78">hanya saat</text>
+      <text x="340" y="165" text-anchor="middle" font-size="10.5" fill="#5b6b78">ada sinyal</text>
+    </g>
+  </svg>
+
+  <div style="display:grid;grid-template-columns:1fr 50mm;gap:6mm;margin-top:5mm">
+    <div>
+      <h2 style="margin-top:0">Aturan sinkronisasi</h2>
+      <table>
+        <tr><td class="tebal" style="width:30%">Pemicu</td><td>Sinyal terdeteksi, setiap 15 menit saat aplikasi terbuka, atau tombol Kirim sekarang</td></tr>
+        <tr><td class="tebal">Urutan</td><td>Antrean terlama dikirim dulu, paling banyak 50 catatan per kiriman, lalu perubahan diambil dari server</td></tr>
+        <tr><td class="tebal">Tanpa ganda</td><td>Setiap catatan punya ID unik dari ponsel. Kiriman ulang tidak digandakan server</td></tr>
+        <tr><td class="tebal">Bentrok</td><td>Perubahan yang lebih dulu diterima server menang. Ponsel lain diberi tahu dan mengambil data terbaru</td></tr>
+        <tr><td class="tebal">Gagal kirim</td><td>Dicoba ulang dengan jeda bertahap. Data di ponsel baru dihapus setelah server mengonfirmasi</td></tr>
+      </table>
+      <h2>Tanda di kanan atas layar</h2>
+      <p><span class="lencana l-kuning">Luring · 3 menunggu</span>&nbsp; tidak ada sinyal, tiga catatan aman di ponsel</p>
+      <p><span class="lencana l-hijau">Tersambung</span>&nbsp; ada sinyal, semua catatan sudah terkirim</p>
+    </div>
+    <img class="hp" src="../mockup/layar-07-sinkronisasi.png" alt="" style="align-self:start">
+  </div>
+  <div class="kaki"><span><b>SANDAR</b> · Cara Kerja</span><span>5</span></div>
+</section>
+
+<!-- 6. SIKLUS STATUS -->
+<section class="halaman">
+  <span class="label">Status catatan panen</span>
+  <h1>Perjalanan satu catatan panen</h1>
+  <p class="pengantar">Status selalu tampil sebagai ikon dan kata, tidak hanya warna, agar mudah dibaca di ponsel murah dan di bawah terik matahari.</p>
+
+  <svg viewBox="0 0 680 330" width="100%" style="display:block;margin-top:4mm">
+    <defs><marker id="p5" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#4a5a67"/></marker></defs>
+    <g font-family="Inter" text-anchor="middle">
+      <g transform="translate(0,130)"><rect width="128" height="56" rx="28" fill="#fdf0cf"/><text x="64" y="24" font-size="13" font-weight="800" fill="#7a4b00">Menunggu</text><text x="64" y="41" font-size="13" font-weight="800" fill="#7a4b00">kirim</text></g>
+      <line x1="130" y1="158" x2="166" y2="158" stroke="#4a5a67" stroke-width="2.2" marker-end="url(#p5)"/>
+      <text x="148" y="148" font-size="9.5" fill="#5b6b78">sinkron</text>
+      <g transform="translate(170,130)"><rect width="128" height="56" rx="28" fill="#e3f1f3"/><text x="64" y="33" font-size="13" font-weight="800" fill="#0e6e7e">Terdaftar</text></g>
+      <line x1="300" y1="148" x2="356" y2="88" stroke="#4a5a67" stroke-width="2.2" marker-end="url(#p5)"/>
+      <line x1="300" y1="168" x2="356" y2="228" stroke="#4a5a67" stroke-width="2.2" marker-end="url(#p5)"/>
+      <text x="318" y="104" font-size="9.5" fill="#5b6b78">ada ruang</text>
+      <text x="318" y="222" font-size="9.5" fill="#5b6b78">ruang habis</text>
+      <g transform="translate(360,58)"><rect width="128" height="56" rx="28" fill="#e3f3e8"/><text x="64" y="33" font-size="13" font-weight="800" fill="#1c6b3a">Dapat jatah</text></g>
+      <g transform="translate(360,202)"><rect width="128" height="56" rx="28" fill="#e8edf0"/><text x="64" y="33" font-size="13" font-weight="800" fill="#4a5a67">Daftar tunggu</text></g>
+      <path d="M424 200 L424 118" stroke="#4a5a67" stroke-width="2.2" fill="none" marker-end="url(#p5)"/>
+      <text x="470" y="163" font-size="9.5" fill="#5b6b78">kapal berikutnya</text>
+      <line x1="490" y1="86" x2="546" y2="86" stroke="#4a5a67" stroke-width="2.2" marker-end="url(#p5)"/>
+      <text x="518" y="76" font-size="9.5" fill="#5b6b78">naik kapal</text>
+      <g transform="translate(550,58)"><rect width="128" height="56" rx="28" fill="#2f8f4e"/><text x="64" y="33" font-size="13" font-weight="800" fill="#fff">Terangkut</text></g>
+      <g transform="translate(170,272)"><rect width="128" height="48" rx="24" fill="#fff" stroke="#a3261b" stroke-dasharray="5 4"/><text x="64" y="29" font-size="12.5" font-weight="800" fill="#a3261b">Dibatalkan</text></g>
+      <line x1="234" y1="188" x2="234" y2="268" stroke="#a3261b" stroke-width="1.8" stroke-dasharray="4 4" marker-end="url(#p5)"/>
+      <text x="290" y="262" font-size="9.5" fill="#a3261b">selama belum Final</text>
+      <text x="20" y="30" text-anchor="start" font-size="11" fill="#5b6b78">Catatan yang dibatalkan tidak dihapus agar riwayatnya tetap utuh.</text>
+    </g>
+  </svg>
+
+  <div style="display:grid;grid-template-columns:50mm 1fr;gap:8mm;margin-top:2mm">
+    <img class="hp" src="../mockup/layar-02-panen-luring.png" alt="">
+    <div>
+      <h2 style="margin-top:0">Arti setiap status</h2>
+      <table>
+        <tr><td><span class="lencana l-kuning">Menunggu kirim</span></td><td>Tersimpan di ponsel, belum sampai server</td></tr>
+        <tr><td><span class="lencana l-aksen">Terdaftar</span></td><td>Diterima server, menunggu pembagian</td></tr>
+        <tr><td><span class="lencana l-hijau">Dapat jatah</span></td><td>Mendapat ruang. Bila sebagian, sisanya tercatat di daftar tunggu</td></tr>
+        <tr><td><span class="lencana l-abu">Daftar tunggu</span></td><td>Belum dapat ruang, ikut dibagi pada kapal berikutnya</td></tr>
+        <tr><td><span class="lencana l-hijau">Terangkut</span></td><td>Sudah naik kapal</td></tr>
+        <tr><td><span class="lencana l-abu">Dibatalkan</span></td><td>Tidak ikut pembagian, riwayat tetap disimpan</td></tr>
+      </table>
+    </div>
+  </div>
+  <div class="kaki"><span><b>SANDAR</b> · Cara Kerja</span><span>6</span></div>
+</section>
+
+<!-- 7. PENCOCOKAN -->
+<section class="halaman">
+  <span class="label">Pencocokan</span>
+  <h1>Ruang kapal dibagi adil</h1>
+  <p class="pengantar">SANDAR memakai pembagian proporsional sederhana dengan metode sisa terbesar. Aturannya dipilih agar mudah dijelaskan kepada petani dan bisa dihitung ulang dengan tangan.</p>
+
+  <div class="kisi-3 ringkas" style="margin-top:3mm">
+    <div class="kartu aksen"><div class="angka">1</div><h3>Ruang cukup?</h3><p class="kecil">Bila total permintaan tidak melebihi ruang kapal, semua permintaan dapat ruang penuh.</p></div>
+    <div class="kartu aksen"><div class="angka">2</div><h3>Bagi sama rata</h3><p class="kecil">Bila tidak cukup, setiap petani mendapat persentase yang sama dari permintaannya, dibulatkan ke bawah.</p></div>
+    <div class="kartu aksen"><div class="angka">3</div><h3>Sisa pembulatan</h3><p class="kecil">Tandan sisa diberikan satu per satu ke pecahan terbesar. Bila sama, yang mencatat lebih dulu didahulukan.</p></div>
+  </div>
+
+  <h2>Contoh: Kapal nelayan Bahari 2</h2>
+  <p class="redup kecil" style="margin-bottom:1mm">Ruang 300 tandan, permintaan 480 tandan, jadi setiap petani mendapat 300 ÷ 480 = <b>62,5 persen</b> dari permintaannya. Data contoh PRD 7.2.</p>
+  <svg viewBox="0 0 680 230" width="100%" style="display:block;max-height:50mm">
+    <g font-family="Inter">
+      <!-- skala: 1 tandan = 2 px -->
+      <g transform="translate(90,20)">
+        <text x="-14" y="26" text-anchor="end" font-size="13" font-weight="700" fill="#1b2733">Rahmat</text>
+        <rect x="0" y="8" width="240" height="30" rx="6" fill="#e8edf0"/><rect x="0" y="8" width="150" height="30" rx="6" fill="#0e6e7e"/>
+        <text x="10" y="28" font-size="12" font-weight="800" fill="#fff">jatah 75</text><text x="250" y="28" font-size="11.5" fill="#4a5a67">diminta 120 · tunggu 45</text>
+      </g>
+      <g transform="translate(90,80)">
+        <text x="-14" y="26" text-anchor="end" font-size="13" font-weight="700" fill="#1b2733">Siti</text>
+        <rect x="0" y="8" width="300" height="30" rx="6" fill="#e8edf0"/><rect x="0" y="8" width="188" height="30" rx="6" fill="#0e6e7e"/>
+        <text x="10" y="28" font-size="12" font-weight="800" fill="#fff">jatah 94</text><text x="310" y="28" font-size="11.5" fill="#4a5a67">diminta 150 · tunggu 56</text>
+      </g>
+      <g transform="translate(90,140)">
+        <text x="-14" y="26" text-anchor="end" font-size="13" font-weight="700" fill="#1b2733">Yanto</text>
+        <rect x="0" y="8" width="420" height="30" rx="6" fill="#e8edf0"/><rect x="0" y="8" width="262" height="30" rx="6" fill="#0e6e7e"/>
+        <text x="10" y="28" font-size="12" font-weight="800" fill="#fff">jatah 131</text><text x="430" y="28" font-size="11.5" fill="#4a5a67">diminta 210 · tunggu 79</text>
+      </g>
+      <g transform="translate(90,200)" font-size="11" fill="#4a5a67">
+        <rect x="0" y="0" width="14" height="14" rx="3" fill="#0e6e7e"/><text x="20" y="11">jatah naik kapal</text>
+        <rect x="140" y="0" width="14" height="14" rx="3" fill="#e8edf0"/><text x="160" y="11">masuk daftar tunggu kapal berikutnya</text>
+      </g>
+    </g>
+  </svg>
+
+  <div style="display:grid;grid-template-columns:1fr 44mm;gap:6mm;margin-top:1mm">
+    <div>
+      <table>
+        <tr><th>Petani</th><th class="angka-sel">Diminta</th><th class="angka-sel">62,5%</th><th class="angka-sel">Bulat bawah</th><th class="angka-sel">Jatah</th></tr>
+        <tr><td>Rahmat</td><td class="angka-sel">120</td><td class="angka-sel">75,00</td><td class="angka-sel">75</td><td class="angka-sel tebal">75</td></tr>
+        <tr><td>Siti</td><td class="angka-sel">150</td><td class="angka-sel">93,75</td><td class="angka-sel">93</td><td class="angka-sel tebal">94</td></tr>
+        <tr><td>Yanto</td><td class="angka-sel">210</td><td class="angka-sel">131,25</td><td class="angka-sel">131</td><td class="angka-sel tebal">131</td></tr>
+        <tr><td class="tebal">Jumlah</td><td class="angka-sel tebal">480</td><td class="angka-sel">300,00</td><td class="angka-sel">299</td><td class="angka-sel tebal">300</td></tr>
+      </table>
+      <p class="catatan">Pembulatan ke bawah menghasilkan 299 tandan. Satu tandan sisa diberikan kepada Siti karena pecahannya paling besar (0,75).</p>
+      <h2 style="margin-top:3.5mm">Sementara, Final, lalu dikunci</h2>
+      <p class="kecil">Hasil di ponsel berlabel <span class="lencana l-kuning">Sementara</span> karena hanya memakai data desa itu. Server menggabungkan data semua desa menjadi hasil <span class="lencana l-hijau">Final</span>, lalu menguncinya pukul 18.00 sehari sebelum kapal berangkat. Bila hasil Final berbeda, ponsel menampilkan pesan "Jatah berubah" beserta angka barunya. Bila keberangkatan batal, jatahnya kembali ke daftar tunggu.</p>
+    </div>
+    <img class="hp" src="../mockup/layar-04-jatah.png" alt="">
+  </div>
+  <div class="kaki"><span><b>SANDAR</b> · Cara Kerja</span><span>7</span></div>
+</section>
+
+<!-- 8. HARGA -->
+<section class="halaman">
+  <span class="label">Harga acuan</span>
+  <h1>Berapa yang benar-benar diterima per tandan?</h1>
+  <p class="pengantar">Harga di pasar daratan belum tentu harga yang diterima petani. SANDAR mengurangi biaya kapal serta biaya tebang dan angkut darat, sehingga petani melihat sisa hasil per tandan sebelum memutuskan.</p>
+
+  <svg viewBox="0 0 680 300" width="100%" style="display:block;margin-top:3mm">
+    <g font-family="Inter">
+      <!-- skala: Rp1.000 = 4 px; dasar y=270 -->
+      <line x1="40" y1="270" x2="660" y2="270" stroke="#dfe5e9" stroke-width="2"/>
+      <rect x="60" y="30" width="110" height="240" rx="8" fill="#0e6e7e"/>
+      <text x="115" y="22" text-anchor="middle" font-size="14" font-weight="800" fill="#1b2733">Rp60.000</text>
+      <text x="115" y="292" text-anchor="middle" font-size="11.5" fill="#4a5a67">Harga acuan</text>
+      <line x1="170" y1="30" x2="220" y2="30" stroke="#5b6b78" stroke-dasharray="4 4"/>
+      <rect x="220" y="30" width="110" height="32" rx="8" fill="#a3261b"/>
+      <text x="275" y="51" text-anchor="middle" font-size="12.5" font-weight="800" fill="#fff">−Rp8.000</text>
+      <text x="275" y="292" text-anchor="middle" font-size="11.5" fill="#4a5a67">Tarif kapal</text>
+      <line x1="330" y1="62" x2="380" y2="62" stroke="#5b6b78" stroke-dasharray="4 4"/>
+      <rect x="380" y="62" width="110" height="28" rx="8" fill="#d36b5f"/>
+      <text x="435" y="81" text-anchor="middle" font-size="12.5" font-weight="800" fill="#fff">−Rp7.000</text>
+      <text x="435" y="292" text-anchor="middle" font-size="11.5" fill="#4a5a67">Tebang + angkut darat</text>
+      <line x1="490" y1="90" x2="540" y2="90" stroke="#5b6b78" stroke-dasharray="4 4"/>
+      <rect x="540" y="90" width="110" height="180" rx="8" fill="#2f8f4e"/>
+      <text x="595" y="82" text-anchor="middle" font-size="14" font-weight="800" fill="#1c6b3a">Rp45.000</text>
+      <text x="595" y="292" text-anchor="middle" font-size="11.5" font-weight="700" fill="#1c6b3a">Sisa hasil per tandan</text>
+    </g>
+  </svg>
+
+  <div style="display:grid;grid-template-columns:1fr 48mm;gap:6mm;margin-top:4mm">
+    <div>
+      <table>
+        <tr><th>Komponen</th><th>Diisi oleh</th><th>Keterangan</th></tr>
+        <tr><td class="tebal">Harga acuan</td><td>Mitra pasar</td><td>Harga terbaru per pasar di Kota Bengkulu, beserta tanggalnya</td></tr>
+        <tr><td class="tebal">Tarif kapal</td><td>Pengelola kapal</td><td>Tarif per tandan pada keberangkatan yang dipilih</td></tr>
+        <tr><td class="tebal">Tebang dan angkut darat</td><td>Pengelola simpul</td><td>Satu nilai per desa</td></tr>
+      </table>
+      <h2>Umur harga</h2>
+      <table>
+        <tr><td style="width:30%">0 sampai 3 hari</td><td>Tanggal pembaruan tampil biasa</td></tr>
+        <tr><td>4 sampai 7 hari</td><td>Label umur ditebalkan</td></tr>
+        <tr><td>Lebih dari 7 hari</td><td><span class="lencana l-merah">Harga lama</span>, harga terakhir tetap ditampilkan</td></tr>
+      </table>
+      <p class="catatan">Layar Harga selalu memuat kalimat: "Harga acuan membantu memutuskan menjual atau menunda. Ini bukan jaminan harga beli." Aplikasi hanya menampilkan angka; keputusan tetap di tangan petani.</p>
+    </div>
+    <img class="hp" src="../mockup/layar-05-harga.png" alt="">
+  </div>
+  <div class="kaki"><span><b>SANDAR</b> · Cara Kerja</span><span>8</span></div>
+</section>
+
+<!-- 9. KEAMANAN & DATA -->
+<section class="halaman">
+  <span class="label">Keamanan dan data</span>
+  <h1>Data petani tetap terlindungi</h1>
+  <p class="pengantar">Perangkat yang hilang, PIN yang ditebak, atau data yang bocor adalah risiko nyata di lapangan. SANDAR menanganinya berlapis.</p>
+
+  <div class="kisi-2" style="margin-top:4mm">
+    <div class="kartu"><div class="ikon-bulat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><rect x="6" y="2" width="12" height="20" rx="2.5"/><path d="M10 6h4"/></svg></div><h3>Aktivasi perangkat</h3><p class="kecil redup">Perangkat baru diaktifkan sekali dengan kode dari Admin. Kode hanya berlaku sekali dan percobaan kode salah dibatasi.</p></div>
+    <div class="kartu"><div class="ikon-bulat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="8" cy="15" r="4"/><path d="M11 12l9-9M17 6l3 3M15 8l2 2"/></svg></div><h3>PIN 4 angka</h3><p class="kecil redup">PIN disimpan sebagai hash dan diperiksa di ponsel, sehingga masuk tetap bisa tanpa sinyal. Lima kali salah, masuk dikunci 5 menit.</p></div>
+    <div class="kartu"><div class="ikon-bulat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0M16 4a3.5 3.5 0 0 1 0 7M18 14a6.5 6.5 0 0 1 3.5 6"/></svg></div><h3>Akses per peran</h3><p class="kecil redup">Petani hanya melihat catatannya sendiri. Rincian jatah per petani hanya dikirim ke perangkat desanya.</p></div>
+    <div class="kartu"><div class="ikon-bulat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><rect x="4" y="10" width="16" height="11" rx="2.5"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg></div><h3>Kunci layar ponsel</h3><p class="kecil redup">Setiap perangkat wajib memakai kunci layar Android, sehingga penyimpanan ponsel terenkripsi. Perangkat hilang dinonaktifkan Admin.</p></div>
+  </div>
+
+  <h2>Yang tercatat untuk mengukur dampak</h2>
+  <p class="kecil redup">Admin melihat empat indikator keberhasilan per desa dan per bulan, serta dapat mengekspornya ke CSV.</p>
+  <div class="kisi-2">
+    <div class="kartu isi"><div class="angka">1</div><h3>Panen keluar pulau</h3><p class="kecil redup">Persentase panen terangkut dalam 7 hari sejak siap angkut</p></div>
+    <div class="kartu isi"><div class="angka">2</div><h3>Harga terima</h3><p class="kecil redup">Selisih harga terima petani dengan harga acuan setelah biaya angkut</p></div>
+    <div class="kartu isi"><div class="angka">3</div><h3>Waktu tunggu</h3><p class="kecil redup">Hari dari siap angkut sampai naik kapal</p></div>
+    <div class="kartu isi"><div class="angka">4</div><h3>Tetap bekerja tanpa sinyal</h3><p class="kecil redup">Catatan tersinkron dalam 24 jam dan jumlah petani terdaftar</p></div>
+  </div>
+  <p class="catatan">Setiap penyesuaian jatah manual, perubahan harga, dan perubahan akun tercatat di log audit.</p>
+  <div class="kaki"><span><b>SANDAR</b> · Cara Kerja</span><span>9</span></div>
+</section>
+
+<!-- 10. COBA -->
+<section class="halaman">
+  <span class="label">Mencoba SANDAR</span>
+  <h1>Coba sendiri dalam 5 menit</h1>
+  <p class="pengantar">SANDAR dapat dicoba langsung dengan data contoh, tanpa kode aktivasi. Buka di Chrome pada ponsel Android, atau di laptop.</p>
+
+  <div style="display:grid;grid-template-columns:62mm 1fr;gap:9mm;margin-top:6mm;align-items:center">
+    <div class="kartu aksen" style="text-align:center;padding:6mm">
+      <img src="qr-sandar.svg" alt="Kode QR ke sandar-6mgj.onrender.com" style="width:46mm;height:46mm;background:#fff;border-radius:3mm;padding:2mm">
+      <p class="tebal" style="margin-top:3mm;color:var(--aksen);font-size:9pt;white-space:nowrap">sandar-6mgj.onrender.com</p>
+      <p class="kecil redup" style="margin:0">Pindai dengan kamera ponsel</p>
+    </div>
+    <div>
+      <ol style="padding-left:5mm">
+        <li style="margin-bottom:2.5mm"><b>Pilih peran</b> di kartu "Mencoba SANDAR?": Pengelola simpul atau petani, Pengelola kapal, atau Mitra pasar.</li>
+        <li style="margin-bottom:2.5mm"><b>Ketuk akun contoh</b>. Nomor HP dan PIN terisi sendiri (PIN 1234).</li>
+        <li style="margin-bottom:2.5mm"><b>Jalankan pencocokan</b> di layar Jatah untuk Kapal nelayan Bahari 2.</li>
+        <li style="margin-bottom:2.5mm"><b>Matikan jaringan</b> (mode pesawat), lalu catat panen. Tanda di kanan atas berubah menjadi "Luring".</li>
+        <li style="margin-bottom:2.5mm"><b>Nyalakan lagi jaringan</b>. Catatan terkirim sendiri.</li>
+        <li><b>Buka Harga</b> untuk melihat sisa hasil per tandan.</li>
+      </ol>
+      <p class="catatan">Server gratis tidur bila tidak dipakai. Bila halaman pertama lambat terbuka, tunggu sekitar 1 menit.</p>
+    </div>
+  </div>
+
+  <div style="display:flex;justify-content:center;gap:5mm;margin-top:5mm">
+    <img src="../mockup/layar-01-aktivasi.png" alt="" style="width:40mm">
+    <img src="../mockup/layar-04-jatah.png" alt="" style="width:40mm">
+    <img src="../mockup/layar-05-harga.png" alt="" style="width:40mm">
+  </div>
+
+  <div class="kartu isi" style="margin-top:5mm;display:grid;grid-template-columns:repeat(3,1fr);gap:4mm;text-align:center">
+    <div><div class="angka">33 + 10</div><p class="kecil redup" style="margin:0">tes otomatis server dan aplikasi</p></div>
+    <div><div class="angka">8</div><p class="kecil redup" style="margin:0">tes end-to-end, termasuk mode pesawat dan tutup paksa</p></div>
+    <div><div class="angka">&lt; 600 KB</div><p class="kecil redup" style="margin:0">unduhan awal untuk ponsel murah</p></div>
+  </div>
+  <p class="kecil redup" style="margin:3mm 0 0;text-align:center">Seluruh nama, angka, dan harga dalam dokumen ini adalah data contoh, bukan data lapangan.</p>
+  <div class="kaki"><span><b>SANDAR</b> · Cara Kerja</span><span>10</span></div>
+</section>
+
+</body>
+</html>
