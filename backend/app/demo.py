@@ -145,13 +145,14 @@ def siapkan_data(db: Session) -> dict[str, Pengguna | Desa | None]:
         db.flush()
         tandai(db, h)
 
-    # Panen contoh PRD 7.2: ditambah lagi bila yang masih menunggu kapal tinggal sedikit.
-    menunggu = db.scalar(
+    # Panen contoh PRD 7.2: ditambah lagi hanya bila catatan yang masih aktif (belum terangkut
+    # atau dibatalkan) tinggal sedikit. Catatan yang sudah dapat jatah tetap dihitung aktif.
+    aktif = db.scalar(
         select(func.count()).select_from(CatatanPanen).where(
-            CatatanPanen.desa_id == meok.id, CatatanPanen.status.in_(("terdaftar", "daftar_tunggu"))
+            CatatanPanen.desa_id == meok.id, CatatanPanen.status.in_(("terdaftar", "daftar_tunggu", "dapat_jatah"))
         )
     )
-    if (menunggu or 0) < 3:
+    if (aktif or 0) < 3:
         simpul = akun["Andi"]
         dibuat = datetime.now(timezone.utc).replace(microsecond=0, tzinfo=None)
         for i, (nama, tandan, siap) in enumerate(PANEN_DEMO):

@@ -52,3 +52,19 @@ def test_data_contoh_disegarkan_saat_jadwal_lewat():
         assert _hitung(db, Keberangkatan, Keberangkatan.status == "buka", Keberangkatan.berangkat > besok) == 2
         assert db.scalar(select(func.max(HargaAcuan.tanggal))) >= (hari_ini_wib() - timedelta(days=3)).isoformat()
         assert _hitung(db, CatatanPanen, CatatanPanen.status == "terdaftar") == 4
+
+
+def test_data_contoh_tidak_bertambah_setelah_dapat_jatah():
+    """Server menyala berulang setelah pencocokan tidak boleh menggandakan panen contoh."""
+    Base.metadata.drop_all(engine)
+    isi(demo=False, admin_hp="081299990000", admin_pin="4321")
+    with SessionLocal() as db:
+        siapkan_untuk_juri(db, 1)
+        for c in db.scalars(select(CatatanPanen)):
+            c.status = "dapat_jatah"
+        db.commit()
+    for _ in range(3):
+        with SessionLocal() as db:
+            siapkan_untuk_juri(db, 1)
+    with SessionLocal() as db:
+        assert _hitung(db, CatatanPanen) == 4
